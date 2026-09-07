@@ -1747,3 +1747,5 @@ EventScript_PalletTown_PlayersHouse_2F_TurnOnPC::
 
 	.include "data/maps/Steel_AluminaVillage/scripts.inc"
 	.include "data/maps/Steel_CatchingWoods/scripts.inc"
+	.include "data/maps/Steel_SouthWoods/scripts.inc"
+	.include "data/maps/Steel_Route1Stub/scripts.inc"

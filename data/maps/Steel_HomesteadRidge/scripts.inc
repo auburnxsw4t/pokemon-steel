@@ -109,6 +109,10 @@ Steel_Ridge_Kyle::
 	msgbox Steel_Ridge_Text_Home, MSGBOX_SIGN
 	end
 
+Steel_Ridge_Logan::
+	msgbox Steel_Ridge_Text_Logan, MSGBOX_NPC
+	end
+
 Steel_Ridge_HomeSign::
 	msgbox Steel_Ridge_Text_Family, MSGBOX_SIGN
 	end
@@ -129,6 +133,10 @@ Steel_Ridge_Text_Home:
 	.string "KYLE: There's our house.\n"
 	.string "Come on. Let's see what Dad caught!$"
 
+Steel_Ridge_Text_Logan:
+	.string "LOGAN: The South Woods trail is\n"
+	.string "closed until the League route opens.$"
+
 Steel_Ridge_Text_Family:
 	.string "LOGAN and MADISON's home$"
 
@@ -136,7 +144,7 @@ Steel_Ridge_Text_Garden:
 	.string "HOMESTEAD COMMUNITY GARDEN$"
 
 Steel_Ridge_Text_Woods:
-	.string "West: CREEKSIDE WOODS$"
+	.string "South: SOUTH WOODS$"
 
 Steel_Ridge_Text_Village:
 	.string "East: ALUMINA VILLAGE$"

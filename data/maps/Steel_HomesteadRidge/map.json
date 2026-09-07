@@ -20,9 +20,9 @@
       "direction": "right"
     },
     {
-      "map": "MAP_STEEL_CATCHING_WOODS",
+      "map": "MAP_STEEL_SOUTH_WOODS",
       "offset": 0,
-      "direction": "left"
+      "direction": "down"
     }
   ],
   "object_events": [
@@ -50,7 +50,7 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "Steel_Ridge_Kyle",
+      "script": "Steel_Ridge_Logan",
       "flag": "FLAG_HIDE_STEEL_LOGAN_RIDGE",
       "local_id": "LOCALID_STEEL_RIDGE_LOGAN"
     }

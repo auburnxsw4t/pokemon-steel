@@ -152,6 +152,10 @@ Steel_Village_ServiceClosed::
 	msgbox Steel_Village_Text_Closed, MSGBOX_SIGN
 	end
 
+Steel_Village_ChapelSign::
+	msgbox Steel_Village_Text_Chapel, MSGBOX_SIGN
+	end
+
 Steel_Village_Text_League:
 	.string "KYLE: See that registration office?\n"
 	.string "The Ferrane League starts there!\p"
@@ -185,3 +189,6 @@ Steel_Village_Text_Registration:
 
 Steel_Village_Text_Closed:
 	.string "Back soon.$"
+
+Steel_Village_Text_Chapel:
+	.string "ST. ARLEN'S CHAPEL\nA quiet place for the village.$"

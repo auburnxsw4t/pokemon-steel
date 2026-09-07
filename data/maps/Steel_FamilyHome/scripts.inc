@@ -26,6 +26,10 @@ Steel_Home_Kyle::
 	msgbox Steel_Home_Text_Kyle, MSGBOX_NPC
 	end
 
+Steel_Home_TrophySign::
+	msgbox Steel_Home_Text_Trophies, MSGBOX_SIGN
+	end
+
 Steel_Home_Text_Logan:
 	.string "LOGAN: There you two are!\n"
 	.string "Ready for your first POKéMON?\p"
@@ -42,6 +46,10 @@ Steel_Home_Text_Madison:
 Steel_Home_Text_Kyle:
 	.string "KYLE: Don't take all day choosing.\n"
 	.string "I'm ready for our first battle!$"
+
+Steel_Home_Text_Trophies:
+	.string "A few old trophies and framed badges.\n"
+	.string "Logan and Madison's journeys fill the walls.$"
 
 Steel_FamilyHome_SyncActors:
 	special SteelSyncOpeningActors

@@ -59,7 +59,7 @@
 #define FLAG_HIDE_STEEL_LOGAN_HOME 0x025
 #define FLAG_HIDE_STEEL_LOGAN_RIDGE 0x026
 #define FLAG_HIDE_STEEL_LOGAN_WOODS 0x027
-#define FLAG_UNUSED_0x028    0x28 // Unused Flag
+#define FLAG_HIDE_STEEL_WOODS_TARGET 0x028
 #define FLAG_UNUSED_0x029    0x29 // Unused Flag
 #define FLAG_UNUSED_0x02A    0x2A // Unused Flag
 #define FLAG_UNUSED_0x02B    0x2B // Unused Flag

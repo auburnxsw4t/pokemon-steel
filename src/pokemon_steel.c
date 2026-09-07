@@ -35,6 +35,7 @@ void SteelSyncOpeningActors(void)
     FlagSet(FLAG_HIDE_STEEL_KYLE_RIDGE);
     FlagSet(FLAG_HIDE_STEEL_KYLE_HOME);
     FlagSet(FLAG_HIDE_STEEL_KYLE_WOODS);
+    FlagSet(FLAG_HIDE_STEEL_WOODS_TARGET);
     switch (stage)
     {
     case STEEL_OPENING_ROLL_CALL:
@@ -68,4 +69,6 @@ void SteelSyncOpeningActors(void)
         FlagClear(FLAG_HIDE_STEEL_LOGAN_WOODS);
     else
         FlagClear(FLAG_HIDE_STEEL_LOGAN_HOME);
+    if (stage == STEEL_OPENING_CATCHING)
+        FlagClear(FLAG_HIDE_STEEL_WOODS_TARGET);
 }

@@ -9358,6 +9358,28 @@
       "layout_version": "emerald"
     },
     {
+      "id": "LAYOUT_STEEL_SOUTH_WOODS",
+      "name": "Steel_SouthWoods_Layout",
+      "width": 32,
+      "height": 24,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Petalburg",
+      "border_filepath": "data/layouts/Steel_SouthWoods/border.bin",
+      "blockdata_filepath": "data/layouts/Steel_SouthWoods/map.bin",
+      "layout_version": "emerald"
+    },
+    {
+      "id": "LAYOUT_STEEL_ROUTE1_STUB",
+      "name": "Steel_Route1Stub_Layout",
+      "width": 24,
+      "height": 20,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Petalburg",
+      "border_filepath": "data/layouts/Steel_Route1Stub/border.bin",
+      "blockdata_filepath": "data/layouts/Steel_Route1Stub/map.bin",
+      "layout_version": "emerald"
+    },
+    {
       "id": "LAYOUT_STEEL_ALUMINA_SCHOOL",
       "name": "Steel_AluminaSchool_Layout",
       "width": 12,
@@ -9377,6 +9399,17 @@
       "secondary_tileset": "gTileset_BrendansMaysHouse",
       "border_filepath": "data/layouts/Steel_FamilyHome/border.bin",
       "blockdata_filepath": "data/layouts/Steel_FamilyHome/map.bin",
+      "layout_version": "emerald"
+    },
+    {
+      "id": "LAYOUT_STEEL_FAMILY_HOME_2F",
+      "name": "Steel_FamilyHome_2F_Layout",
+      "width": 9,
+      "height": 8,
+      "primary_tileset": "gTileset_Building",
+      "secondary_tileset": "gTileset_BrendansMaysHouse",
+      "border_filepath": "data/layouts/Steel_FamilyHome_2F/border.bin",
+      "blockdata_filepath": "data/layouts/Steel_FamilyHome_2F/map.bin",
       "layout_version": "emerald"
     }
   ]

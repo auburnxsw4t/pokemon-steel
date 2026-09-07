@@ -72,7 +72,7 @@ def main():
     try:
         e.advance(lambda:e.stage()==12)
         e.step(100)
-        print('PASS: new game, school roll call, Alumina escort, ridge escort, home arrival',e.history)
+        print('PASS: new game, school roll call, Alumina escort, ridge escort, catching tutorial, return home',e.history)
         e.cmd('save /tmp/steel-home.state')
         e.assert_kyle('HOME')
         e.walk(128,32);e.step(120)
@@ -88,11 +88,16 @@ def main():
         e.goto(32,16);e.goto(0,16);e.walk(32,32);e.step(80)
         assert e.location()[1]==1
         e.goto(0,16);e.walk(32,32);e.step(80)
-        assert e.location()[1]==5,('woods entry',e.location(),e.player())
-        e.assert_kyle('HOME')
-        e.goto(27,16);e.walk(16,32);e.step(80)
-        assert e.location()[1]==1
+        assert e.location()[1]==1,('ridge west edge remains bounded',e.location(),e.player())
+        e.goto(35,16);e.walk(16,32);e.step(80)
+        assert e.location()[1]==4,('village re-entry',e.location(),e.player())
+        e.goto(39,16);e.walk(16,32);e.step(80)
+        assert e.location()[1]==7,('route 1 stub entry',e.location(),e.player())
+        e.walk(32,32);e.step(80)
+        assert e.location()[1]==4,('route 1 blocker return',e.location(),e.player())
+        e.goto(26,30);e.walk(128,32);e.step(120)
+        assert e.location()[1]==4,('South Woods gate return',e.location(),e.player())
         assert e.stage()==12
-        print('PASS: home/school/Alumina/ridge/woods re-entry; Kyle remains exclusively at home')
+        print('PASS: home/school/Alumina/ridge re-entry and Route 1 stub; Kyle remains exclusively at home')
     finally:e.close()
 if __name__=='__main__':main()

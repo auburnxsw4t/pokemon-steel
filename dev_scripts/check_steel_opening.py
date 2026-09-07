@@ -34,6 +34,9 @@ def check_maps():
     maps = {p.parent.name: json.loads(p.read_text()) for p in (ROOT/'data/maps').glob('Steel_*/map.json')}
     by_id = {m['id']:m for m in maps.values()}
     layouts = {l['id']:l for l in json.loads((ROOT/'data/layouts/layouts.json').read_text())['layouts']}
+    expected_maps = {'Steel_AluminaVillage', 'Steel_HomesteadRidge', 'Steel_CatchingWoods',
+                     'Steel_SouthWoods', 'Steel_Route1Stub', 'Steel_FamilyHome_2F'}
+    assert expected_maps <= maps.keys(), expected_maps - maps.keys()
     for name,m in maps.items():
         layout=layouts[m['layout']]
         raw=(ROOT/layout['blockdata_filepath']).read_bytes()
@@ -48,7 +51,24 @@ def check_maps():
         for w in m['warp_events']:
             assert w['dest_map'] in by_id, (name,w)
             assert int(w['dest_warp_id']) < len(by_id[w['dest_map']]['warp_events']), (name,w)
-    print('PASS: map sizes, NPC collision tiles, Kyle hide flags, and destination warps')
+    def directions(name):
+        return [c['direction'] for c in maps[name]['connections'] or []]
+    assert {'left', 'down', 'right'} <= set(directions('Steel_AluminaVillage'))
+    assert {'right', 'down'} <= set(directions('Steel_HomesteadRidge'))
+    assert {'up'} <= set(directions('Steel_SouthWoods'))
+    assert directions('Steel_Route1Stub') == ['left']
+    woods = maps['Steel_CatchingWoods']
+    target = next(o for o in woods['object_events'] if o.get('local_id') == 'LOCALID_STEEL_WOODS_TARGET')
+    layout = layouts[woods['layout']]
+    raw = (ROOT / layout['blockdata_filepath']).read_bytes()
+    target_block = struct.unpack_from('<H', raw, 2 * (target['y'] * layout['width'] + target['x']))[0] & 0x3ff
+    assert target_block == 0x00D, ('catching target is not in tall grass', hex(target_block))
+    south_layout = layouts[maps['Steel_SouthWoods']['layout']]
+    south_raw = (ROOT / south_layout['blockdata_filepath']).read_bytes()
+    south_blocks = struct.unpack('<' + 'H' * (len(south_raw) // 2), south_raw)
+    assert 0x00D in {b & 0x3ff for b in south_blocks}, 'South Woods has no tall grass'
+    assert maps['Steel_FamilyHome_2F']['layout'] == 'LAYOUT_STEEL_FAMILY_HOME_2F'
+    print('PASS: map sizes, topology, tall-grass target, NPC collision tiles, Kyle hide flags, and destination warps')
 
 if __name__ == '__main__':
     check_actors()
