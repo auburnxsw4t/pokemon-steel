@@ -16,7 +16,7 @@ def check_actors():
     function = source[start:i]
     flags = re.findall(r'^#define (FLAG_HIDE_STEEL_\w+) (0x[0-9A-Fa-f]+)', (ROOT/'include/constants/flags.h').read_text(), re.M)
     definitions = '\n'.join('#define %s %s' % f for f in flags)
-    expected = {0: 'SCHOOL', 1: 'RIDGE', 2: 'HOME', 3: 'HOME'}
+    expected = {0: 'SCHOOL', 1: 'VILLAGE', 2: 'HOME', 3: 'HOME', 4: 'RIDGE'}
     checks = '\n'.join('stage=%d; SteelSyncOpeningActors(); assert(!hidden[FLAG_HIDE_STEEL_KYLE_%s]); assert(visible()==1);' % (stage, actor) for stage, actor in expected.items())
     c = ('#include <stdint.h>\n#include <assert.h>\n#include "constants/pokemon_steel.h"\ntypedef uint16_t u16;\n'
          + definitions + '\n#define VAR_STEEL_OPENING 0\nstatic u16 stage; static unsigned char hidden[4096];\n'

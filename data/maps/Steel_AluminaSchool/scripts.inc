@@ -5,9 +5,6 @@ Steel_AluminaSchool_MapScripts::
 	.byte 0
 
 Steel_School_OnTransition:
-	goto_if_lt VAR_STEEL_OPENING, STEEL_OPENING_HOME, Steel_School_KeepKyle
-	removeobject LOCALID_STEEL_SCHOOL_KYLE
-Steel_School_KeepKyle:
 	end
 
 Steel_School_OnFrame:
@@ -33,11 +30,19 @@ Steel_School_ConfirmName:
 	goto_if_eq VAR_RESULT, NO, Steel_School_Identity
 	msgbox Steel_School_Text_Dismissed, MSGBOX_DEFAULT
 	msgbox Steel_School_Text_Kyle, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_STEEL_SCHOOL_KYLE, Steel_School_KyleExit
+	applymovement OBJ_EVENT_ID_PLAYER, Steel_School_PlayerExit
+	waitmovement LOCALID_STEEL_SCHOOL_KYLE
+	waitmovement OBJ_EVENT_ID_PLAYER
+	removeobject LOCALID_STEEL_SCHOOL_KYLE
 	setvar VAR_STEEL_OPENING, STEEL_OPENING_DISMISSED
 	special SteelSyncOpeningActors
-	removeobject LOCALID_STEEL_SCHOOL_KYLE
+	warp MAP_STEEL_ALUMINA_VILLAGE, 32, 8
+	waitstate
 	releaseall
 	end
+
 
 Steel_School_Teacher::
 	msgbox Steel_School_Text_Dismissed, MSGBOX_NPC
@@ -86,3 +91,16 @@ Steel_School_Text_Classmate:
 Steel_AluminaSchool_SyncActors:
 	special SteelSyncOpeningActors
 	end
+Steel_School_KyleExit:
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	step_end
+
+Steel_School_PlayerExit:
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	step_end

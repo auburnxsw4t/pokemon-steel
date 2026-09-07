@@ -9323,6 +9323,61 @@
       "border_filepath": "data/layouts/OneIsland_KindleRoad_EmberSpa_Frlg/border.bin",
       "blockdata_filepath": "data/layouts/OneIsland_KindleRoad_EmberSpa_Frlg/map.bin",
       "layout_version": "frlg"
+    },
+    {
+      "id": "LAYOUT_STEEL_ALUMINA_VILLAGE",
+      "name": "Steel_AluminaVillage_Layout",
+      "width": 40,
+      "height": 32,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Petalburg",
+      "border_filepath": "data/layouts/Steel_AluminaVillage/border.bin",
+      "blockdata_filepath": "data/layouts/Steel_AluminaVillage/map.bin",
+      "layout_version": "emerald"
+    },
+    {
+      "id": "LAYOUT_STEEL_HOMESTEAD_RIDGE",
+      "name": "Steel_HomesteadRidge_Layout",
+      "width": 36,
+      "height": 28,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Petalburg",
+      "border_filepath": "data/layouts/Steel_HomesteadRidge/border.bin",
+      "blockdata_filepath": "data/layouts/Steel_HomesteadRidge/map.bin",
+      "layout_version": "emerald"
+    },
+    {
+      "id": "LAYOUT_STEEL_CATCHING_WOODS",
+      "name": "Steel_CatchingWoods_Layout",
+      "width": 28,
+      "height": 24,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Petalburg",
+      "border_filepath": "data/layouts/Steel_CatchingWoods/border.bin",
+      "blockdata_filepath": "data/layouts/Steel_CatchingWoods/map.bin",
+      "layout_version": "emerald"
+    },
+    {
+      "id": "LAYOUT_STEEL_ALUMINA_SCHOOL",
+      "name": "Steel_AluminaSchool_Layout",
+      "width": 12,
+      "height": 11,
+      "primary_tileset": "gTileset_Building",
+      "secondary_tileset": "gTileset_PokemonSchool",
+      "border_filepath": "data/layouts/Steel_AluminaSchool/border.bin",
+      "blockdata_filepath": "data/layouts/Steel_AluminaSchool/map.bin",
+      "layout_version": "emerald"
+    },
+    {
+      "id": "LAYOUT_STEEL_FAMILY_HOME",
+      "name": "Steel_FamilyHome_Layout",
+      "width": 11,
+      "height": 9,
+      "primary_tileset": "gTileset_Building",
+      "secondary_tileset": "gTileset_BrendansMaysHouse",
+      "border_filepath": "data/layouts/Steel_FamilyHome/border.bin",
+      "blockdata_filepath": "data/layouts/Steel_FamilyHome/map.bin",
+      "layout_version": "emerald"
     }
   ]
 }

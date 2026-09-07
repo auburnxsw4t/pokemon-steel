@@ -1,7 +1,7 @@
 {
   "id": "MAP_STEEL_FAMILY_HOME",
   "name": "Steel_FamilyHome",
-  "layout": "LAYOUT_LITTLEROOT_TOWN_BRENDANS_HOUSE_1F",
+  "layout": "LAYOUT_STEEL_FAMILY_HOME",
   "music": "MUS_LITTLEROOT",
   "region": "REGION_HOENN",
   "region_map_section": "MAPSEC_LITTLEROOT_TOWN",
@@ -26,7 +26,8 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "Steel_Home_Logan",
-      "flag": "0"
+      "flag": "0",
+      "local_id": "LOCALID_STEEL_HOME_LOGAN"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_MOM",
@@ -52,7 +53,8 @@
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
       "script": "Steel_Home_Kyle",
-      "flag": "FLAG_HIDE_STEEL_KYLE_HOME"
+      "flag": "FLAG_HIDE_STEEL_KYLE_HOME",
+      "local_id": "LOCALID_STEEL_HOME_KYLE"
     }
   ],
   "warp_events": [
@@ -61,14 +63,14 @@
       "y": 8,
       "elevation": 0,
       "dest_map": "MAP_STEEL_HOMESTEAD_RIDGE",
-      "dest_warp_id": "1"
+      "dest_warp_id": "0"
     },
     {
       "x": 8,
       "y": 8,
       "elevation": 0,
       "dest_map": "MAP_STEEL_HOMESTEAD_RIDGE",
-      "dest_warp_id": "1"
+      "dest_warp_id": "0"
     },
     {
       "x": 8,

@@ -1,0 +1,36 @@
+{
+  "id": "MAP_STEEL_CATCHING_WOODS",
+  "name": "Steel_CatchingWoods",
+  "layout": "LAYOUT_STEEL_CATCHING_WOODS",
+  "music": "MUS_PETALBURG_WOODS",
+  "region": "REGION_HOENN",
+  "region_map_section": "MAPSEC_LITTLEROOT_TOWN",
+  "requires_flash": false,
+  "weather": "WEATHER_SUNNY",
+  "map_type": "MAP_TYPE_ROUTE",
+  "allow_cycling": true,
+  "allow_escaping": false,
+  "allow_running": true,
+  "show_map_name": false,
+  "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
+  "connections": [
+    {
+      "map": "MAP_STEEL_HOMESTEAD_RIDGE",
+      "offset": 0,
+      "direction": "right"
+    }
+  ],
+  "object_events": [],
+  "warp_events": [],
+  "coord_events": [],
+  "bg_events": [
+    {
+      "type": "sign",
+      "x": 25,
+      "y": 18,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "Steel_Woods_Sign"
+    }
+  ]
+}

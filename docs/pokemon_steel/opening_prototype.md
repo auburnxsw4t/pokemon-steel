@@ -146,60 +146,41 @@ Kyle always chooses the starter whose final secondary typing beats the player's.
 The first successful ROM milestone should boot in a GBA emulator and make the opening above playable with working maps, sprites, starter species data, catching tutorial, starter selection, Kyle battle, held-item reward, and local wild encounters.
 
 
-## Incremental implementation status (2026-09-07)
+## Stabilization progress (2026-09-07)
 
-The school-to-home increment implements story steps 1-4. New Game enters
-Alumina School directly, with roll-call identity selection, Jayson/Evelyn
-default names, optional renaming, and confirmation. Kyle introduces himself
-as the nine-minutes-older sibling and leads the player home. Logan explains
-that two starters are ready and the third still needs catching. Madison and
-Kyle have repeatable home dialogue. The player can revisit school and explore
-the home, including its upstairs room.
+The current map/escort milestone implements the classroom, a separate Alumina
+Village exterior, a four-house Homestead Ridge, the shared family home, and a
+separate creek/woods map. The authored layouts reuse Emerald metatiles; the
+school and family house are on different exterior maps. `build_steel_layouts.py`
+records the authored terrain and building placements.
 
-This is an intermediate build, not the complete v0.0.1 vertical slice. The
-creek, Scizor catching demonstration, custom starter species and selection,
-Kyle battle, Silk Scarf, healing, wild encounters, and Alumina Village road
-unlock remain to be implemented. The northern road is gated at this stage.
-The original story and species design above remain the implementation target.
+School dismissal now locks control and escorts the player through Alumina,
+west into Homestead Ridge, and into the family home. Paired movement scripts
+have dialogue stops and explicit waits for both actors. Kyle's visibility is
+recomputed by `SteelSyncOpeningActors` from the persistent opening variable
+before map objects spawn. Each map's Kyle has a dedicated hide flag.
 
-### Placeholder assets and map isolation
+Existing state values remain 0 (roll call), 1 (dismissed), 2 (home arrival),
+and 3 (ready for creek). State 4 is the Homestead escort. Additional stages
+will be appended for the catching demonstration and subsequent opening flow.
 
-- `Steel_AluminaSchool` uses the Rustboro school layout and gentleman teacher.
-- `Steel_HomesteadRidge` uses Littleroot's layout; its east house represents
-  the school exterior and its west house represents the family home.
-- `Steel_FamilyHome` and its upstairs reuse Brendan's house layouts.
-- Kyle always uses the male Brendan rival sprite; Logan uses Norman and
-  Madison uses Emerald's Mom. These are temporary asset assignments.
-- Steel maps have their own scripts and warps. Original Emerald story scripts
-  are not attached to them. Map-name popups are disabled while their layouts
-  still carry placeholder Hoenn region-map sections.
-- Persistent `VAR_STEEL_OPENING` uses the formerly unused slot `0x40F7`.
-  Stages are 0 (roll call), 1 (dismissed), 2 (home arrival pending), and
-  3 (creek sequence next). Do not renumber stages in subsequent increments.
+The catching demonstration and placeholder starter handoff are the next
+increment. No custom starter species have been added. Service buildings in
+Alumina are exterior placeholders, and population/detail work remains.
 
-### Verification and emulator checklist
+### Verification
 
-Use a **new save** to exercise the replacement opening; existing Emerald saves
-are not migrated. The build command is `make` (parallel `make -j2` is also
-supported); output remains `pokeemerald.gba`.
+- `make` and `python3 dev_scripts/check_steel_opening.py` pass.
+- The actor check compiles and executes the actual C visibility special.
+- The headless mGBA driver uses an isolated, in-memory cartridge save. It does
+  not open or overwrite `pokeemerald.sav`.
+- `python3 dev_scripts/test_steel_opening_emulator.py /path/to/steel-mgba-runner`
+  boots a new game, completes the classroom and escorts, then walks back
+  through school, Alumina, Homestead Ridge, and the woods. Kyle remains
+  exclusively assigned to the family home after these visits.
+- `dev_scripts/steel_mgba_runner.c` builds against mGBA's core library with
+  that library's compile definitions. The runner used here is mGBA 0.10.5.
 
-Baseline and final `make` builds passed for this increment.
-
-Static map checks cover the initial spawn, every new NPC position, both
-scripted walking paths, and all destination warp indices. Runtime behavior
-still needs an emulator pass; no emulator test has been claimed.
-
-1. Start a new game. Verify that school appears without Birch's speech or the
-   truck sequence.
-2. Test both identities with the default names and with a custom name. Reject
-   the confirmation and choose again; confirm blank naming-screen submission
-   keeps the chosen default. Verify the player sprite matches the identity.
-3. Leave through either school doorway. Verify Kyle's dialogue and both
-   walking paths finish in front of the family home without blocking input.
-4. Enter the home and read Logan's introduction. Talk to both parents and
-   Kyle, then visit the upstairs room and return.
-5. Revisit school and the neighborhood. Dismissal, the walk home, and Logan's
-   automatic introduction must not replay; Kyle must not reappear outside.
-6. Save, reset, and continue after dismissal and after arriving home. Confirm
-   progress and the chosen identity/name persist. Check both northern road
-   trigger tiles keep the player in the prototype area.
+Start a new save when testing the new geography; old map coordinates are not
+migrated. Final character graphics, village services, and starter species are
+still placeholders. The design above remains the story authority.

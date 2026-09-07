@@ -7,4 +7,6 @@
 #define STEEL_OPENING_HOME 2
 #define STEEL_OPENING_CREEK_NEXT 3
 
+#define STEEL_OPENING_RIDGE_HOME 4
+
 #endif

@@ -41,6 +41,9 @@ void SteelSyncOpeningActors(void)
         FlagClear(FLAG_HIDE_STEEL_KYLE_SCHOOL);
         break;
     case STEEL_OPENING_DISMISSED:
+        FlagClear(FLAG_HIDE_STEEL_KYLE_VILLAGE);
+        break;
+    case STEEL_OPENING_RIDGE_HOME:
         FlagClear(FLAG_HIDE_STEEL_KYLE_RIDGE);
         break;
     default:

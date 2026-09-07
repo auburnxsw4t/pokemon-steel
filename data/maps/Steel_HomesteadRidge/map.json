@@ -1,7 +1,7 @@
 {
   "id": "MAP_STEEL_HOMESTEAD_RIDGE",
   "name": "Steel_HomesteadRidge",
-  "layout": "LAYOUT_LITTLEROOT_TOWN",
+  "layout": "LAYOUT_STEEL_HOMESTEAD_RIDGE",
   "music": "MUS_LITTLEROOT",
   "region": "REGION_HOENN",
   "region_map_section": "MAPSEC_LITTLEROOT_TOWN",
@@ -13,14 +13,25 @@
   "allow_running": true,
   "show_map_name": false,
   "battle_scene": "MAP_BATTLE_SCENE_NORMAL",
-  "connections": null,
+  "connections": [
+    {
+      "map": "MAP_STEEL_ALUMINA_VILLAGE",
+      "offset": 0,
+      "direction": "right"
+    },
+    {
+      "map": "MAP_STEEL_CATCHING_WOODS",
+      "offset": 0,
+      "direction": "left"
+    }
+  ],
   "object_events": [
     {
       "graphics_id": "OBJ_EVENT_GFX_RIVAL_BRENDAN_NORMAL",
-      "x": 13,
-      "y": 10,
+      "x": 32,
+      "y": 15,
       "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_FACE_LEFT",
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
       "movement_range_x": 0,
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
@@ -28,56 +39,50 @@
       "script": "Steel_Ridge_Kyle",
       "flag": "FLAG_HIDE_STEEL_KYLE_RIDGE",
       "local_id": "LOCALID_STEEL_RIDGE_KYLE"
-    },
-    {
-      "graphics_id": "OBJ_EVENT_GFX_WOMAN_1",
-      "x": 7,
-      "y": 17,
-      "elevation": 3,
-      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
-      "movement_range_x": 0,
-      "movement_range_y": 0,
-      "trainer_type": "TRAINER_TYPE_NONE",
-      "trainer_sight_or_berry_tree_id": "0",
-      "script": "Steel_Ridge_Neighbor",
-      "flag": "0"
     }
   ],
   "warp_events": [
     {
-      "x": 14,
-      "y": 8,
-      "elevation": 0,
-      "dest_map": "MAP_STEEL_ALUMINA_SCHOOL",
-      "dest_warp_id": "0"
-    },
-    {
-      "x": 5,
-      "y": 8,
+      "x": 8,
+      "y": 11,
       "elevation": 0,
       "dest_map": "MAP_STEEL_FAMILY_HOME",
       "dest_warp_id": "0"
     }
   ],
-  "coord_events": [
+  "coord_events": [],
+  "bg_events": [
     {
-      "type": "trigger",
-      "x": 10,
-      "y": 1,
-      "elevation": 3,
-      "var": "VAR_TEMP_0",
-      "var_value": "0",
-      "script": "Steel_Ridge_RoadClosed"
+      "type": "sign",
+      "x": 11,
+      "y": 12,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "Steel_Ridge_HomeSign"
     },
     {
-      "type": "trigger",
-      "x": 11,
-      "y": 1,
-      "elevation": 3,
-      "var": "VAR_TEMP_0",
-      "var_value": "0",
-      "script": "Steel_Ridge_RoadClosed"
+      "type": "sign",
+      "x": 28,
+      "y": 14,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "Steel_Ridge_GardenSign"
+    },
+    {
+      "type": "sign",
+      "x": 3,
+      "y": 17,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "Steel_Ridge_WoodsSign"
+    },
+    {
+      "type": "sign",
+      "x": 32,
+      "y": 18,
+      "elevation": 0,
+      "player_facing_dir": "BG_EVENT_PLAYER_FACING_ANY",
+      "script": "Steel_Ridge_VillageSign"
     }
-  ],
-  "bg_events": []
+  ]
 }

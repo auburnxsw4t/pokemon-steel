@@ -1,7 +1,7 @@
 {
   "id": "MAP_STEEL_ALUMINA_SCHOOL",
   "name": "Steel_AluminaSchool",
-  "layout": "LAYOUT_RUSTBORO_CITY_POKEMON_SCHOOL",
+  "layout": "LAYOUT_STEEL_ALUMINA_SCHOOL",
   "music": "MUS_SCHOOL",
   "region": "REGION_HOENN",
   "region_map_section": "MAPSEC_RUSTBORO_CITY",
@@ -61,14 +61,14 @@
       "x": 5,
       "y": 10,
       "elevation": 0,
-      "dest_map": "MAP_STEEL_HOMESTEAD_RIDGE",
+      "dest_map": "MAP_STEEL_ALUMINA_VILLAGE",
       "dest_warp_id": "0"
     },
     {
       "x": 6,
       "y": 10,
       "elevation": 0,
-      "dest_map": "MAP_STEEL_HOMESTEAD_RIDGE",
+      "dest_map": "MAP_STEEL_ALUMINA_VILLAGE",
       "dest_warp_id": "0"
     }
   ],
