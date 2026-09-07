@@ -2,6 +2,7 @@
 #include "config/battle.h"
 #include "config/item.h"
 #include "constants/global.h"
+#include "constants/pokemon_steel.h"
 #include "constants/apprentice.h"
 #include "constants/apricorn_tree.h"
 #include "constants/battle.h"
@@ -1738,3 +1739,8 @@ EventScript_PalletTown_PlayersHouse_2F_TurnOnPC::
 	.include "data/scripts/battle_frontier.inc"
 	.include "data/scripts/apricorn_tree.inc"
 	.include "data/scripts/wild_encounter.inc"
+
+	.include "data/maps/Steel_AluminaSchool/scripts.inc"
+	.include "data/maps/Steel_HomesteadRidge/scripts.inc"
+	.include "data/maps/Steel_FamilyHome/scripts.inc"
+	.include "data/maps/Steel_FamilyHome_2F/scripts.inc"

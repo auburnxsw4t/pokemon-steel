@@ -1296,6 +1296,16 @@ static void HighlightSelectedMainMenuItem(enum PartyMenuType menuType, u8 select
 
 static void Task_NewGameBirchSpeech_Init(u8 taskId)
 {
+    if (!IS_FRLG)
+    {
+        // Steel handles identity and naming during the school roll call.
+        StartTimer1();
+        FreeAllWindowBuffers();
+        DestroyTask(taskId);
+        SetMainCallback2(CB2_NewGame);
+        return;
+    }
+
     SetGpuReg(REG_OFFSET_DISPCNT, 0);
     SetGpuReg(REG_OFFSET_DISPCNT, DISPCNT_OBJ_ON | DISPCNT_OBJ_1D_MAP);
     InitBgFromTemplate(&sBirchBgTemplate);
