@@ -41,13 +41,31 @@ void SteelSyncOpeningActors(void)
         FlagClear(FLAG_HIDE_STEEL_KYLE_SCHOOL);
         break;
     case STEEL_OPENING_DISMISSED:
+    case STEEL_OPENING_ALUMINA_WALK:
+    case STEEL_OPENING_COMPLETE:
         FlagClear(FLAG_HIDE_STEEL_KYLE_VILLAGE);
         break;
     case STEEL_OPENING_RIDGE_HOME:
+    case STEEL_OPENING_RIDGE_CREEK:
+    case STEEL_OPENING_RIDGE_RETURN:
         FlagClear(FLAG_HIDE_STEEL_KYLE_RIDGE);
+        break;
+    case STEEL_OPENING_CATCHING:
+    case STEEL_OPENING_WOODS_RETURN:
+    case STEEL_OPENING_TUTORIAL_RETRY:
+        FlagClear(FLAG_HIDE_STEEL_KYLE_WOODS);
         break;
     default:
         FlagClear(FLAG_HIDE_STEEL_KYLE_HOME);
         break;
     }
+    FlagSet(FLAG_HIDE_STEEL_LOGAN_HOME);
+    FlagSet(FLAG_HIDE_STEEL_LOGAN_RIDGE);
+    FlagSet(FLAG_HIDE_STEEL_LOGAN_WOODS);
+    if (stage == STEEL_OPENING_RIDGE_CREEK || stage == STEEL_OPENING_RIDGE_RETURN)
+        FlagClear(FLAG_HIDE_STEEL_LOGAN_RIDGE);
+    else if (stage == STEEL_OPENING_CATCHING || stage == STEEL_OPENING_WOODS_RETURN || stage == STEEL_OPENING_TUTORIAL_RETRY)
+        FlagClear(FLAG_HIDE_STEEL_LOGAN_WOODS);
+    else
+        FlagClear(FLAG_HIDE_STEEL_LOGAN_HOME);
 }

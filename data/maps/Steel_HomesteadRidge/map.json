@@ -39,6 +39,20 @@
       "script": "Steel_Ridge_Kyle",
       "flag": "FLAG_HIDE_STEEL_KYLE_RIDGE",
       "local_id": "LOCALID_STEEL_RIDGE_KYLE"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_NORMAN",
+      "x": 7,
+      "y": 12,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_DOWN",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "Steel_Ridge_Kyle",
+      "flag": "FLAG_HIDE_STEEL_LOGAN_RIDGE",
+      "local_id": "LOCALID_STEEL_RIDGE_LOGAN"
     }
   ],
   "warp_events": [

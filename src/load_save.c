@@ -20,7 +20,7 @@
 #include "event_data.h"
 #include "constants/event_objects.h"
 
-static void ApplyNewEncryptionKeyToAllEncryptedData(u32 encryptionKey);
+void ApplyNewEncryptionKeyToAllEncryptedData(u32 encryptionKey);
 
 #define SAVEBLOCK_MOVE_RANGE    128
 
@@ -297,7 +297,7 @@ void ApplyNewEncryptionKeyToWord(u32 *word, u32 newKey)
     *word ^= newKey;
 }
 
-static void ApplyNewEncryptionKeyToAllEncryptedData(u32 encryptionKey)
+void ApplyNewEncryptionKeyToAllEncryptedData(u32 encryptionKey)
 {
     ApplyNewEncryptionKeyToGameStats(encryptionKey);
     ApplyNewEncryptionKeyToBagItems(encryptionKey);

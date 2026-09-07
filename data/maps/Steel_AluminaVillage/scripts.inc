@@ -10,6 +10,7 @@ Steel_Village_OnFrame:
 	.2byte 0
 Steel_Village_Escort::
 	lockall
+	setvar VAR_STEEL_OPENING, STEEL_OPENING_ALUMINA_WALK
 	msgbox Steel_Village_Text_League, MSGBOX_DEFAULT
 	closemessage
 	applymovement LOCALID_STEEL_VILLAGE_KYLE, Steel_Village_KyleToGreen

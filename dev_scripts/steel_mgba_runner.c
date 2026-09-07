@@ -64,6 +64,8 @@ int main(int argc, char **argv)
             if(!f || fread(buf,1,size,f)!=size)return 6;
             fclose(f);core->loadState(core,buf);free(buf);puts("ok");
         }
+        else if (sscanf(line,"reg %899s",path)==1) {a=0;core->readRegister(core,path,&a);printf("%08x\n",a);}
+        else if (!strncmp(line,"reset",5)) {core->reset(core);puts("ok");}
         else if (!strncmp(line,"quit",4)) break;
         else puts("unknown");
         fflush(stdout);

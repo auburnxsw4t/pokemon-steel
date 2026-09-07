@@ -56,9 +56,9 @@
 #define FLAG_HIDE_STEEL_KYLE_RIDGE 0x22
 #define FLAG_HIDE_STEEL_KYLE_HOME 0x23
 #define FLAG_HIDE_STEEL_KYLE_WOODS 0x24
-#define FLAG_UNUSED_0x025    0x25 // Unused Flag
-#define FLAG_UNUSED_0x026    0x26 // Unused Flag
-#define FLAG_UNUSED_0x027    0x27 // Unused Flag
+#define FLAG_HIDE_STEEL_LOGAN_HOME 0x025
+#define FLAG_HIDE_STEEL_LOGAN_RIDGE 0x026
+#define FLAG_HIDE_STEEL_LOGAN_WOODS 0x027
 #define FLAG_UNUSED_0x028    0x28 // Unused Flag
 #define FLAG_UNUSED_0x029    0x29 // Unused Flag
 #define FLAG_UNUSED_0x02A    0x2A // Unused Flag

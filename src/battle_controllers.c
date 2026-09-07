@@ -1,4 +1,5 @@
 #include "global.h"
+#include "pokemon_steel.h"
 #include "battle.h"
 #include "battle_ai_main.h"
 #include "battle_ai_util.h"
@@ -107,6 +108,7 @@ bool32 BattlerHasAi(enum BattlerId battlerId)
     case BATTLE_CONTROLLER_PLAYER_PARTNER:
     case BATTLE_CONTROLLER_SAFARI:
     case BATTLE_CONTROLLER_WALLY:
+    case BATTLE_CONTROLLER_LOGAN:
         return TRUE;
     default:
         break;
@@ -273,7 +275,7 @@ static void InitBtlControllersInternal(void)
             else if (gBattleTypeFlags & BATTLE_TYPE_SAFARI)
                 gBattlerControllerFuncs[GetBattlerPosition(B_BATTLER_0)] = SetControllerToSafari;
             else if (gBattleTypeFlags & BATTLE_TYPE_CATCH_TUTORIAL)
-                gBattlerControllerFuncs[GetBattlerPosition(B_BATTLER_0)] = IS_FRLG ? SetControllerToOakOrOldMan : SetControllerToWally;
+                gBattlerControllerFuncs[GetBattlerPosition(B_BATTLER_0)] = gSteelLoganTutorialActive ? SetControllerToLogan : (IS_FRLG ? SetControllerToOakOrOldMan : SetControllerToWally);
             else if (IS_FRLG && (gBattleTypeFlags & BATTLE_TYPE_FIRST_BATTLE))
                 gBattlerControllerFuncs[gBattlerPositions[B_BATTLER_0]] = SetControllerToOakOrOldMan;
             else if (isAIvsAI)

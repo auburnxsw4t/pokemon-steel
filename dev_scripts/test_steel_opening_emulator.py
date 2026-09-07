@@ -70,7 +70,7 @@ class Emulator:
 def main():
     e=Emulator(sys.argv[1]);e.step(400);e.tap(8)
     try:
-        e.advance(lambda:e.stage()==3)
+        e.advance(lambda:e.stage()==12)
         e.step(100)
         print('PASS: new game, school roll call, Alumina escort, ridge escort, home arrival',e.history)
         e.cmd('save /tmp/steel-home.state')
@@ -92,7 +92,7 @@ def main():
         e.assert_kyle('HOME')
         e.goto(27,16);e.walk(16,32);e.step(80)
         assert e.location()[1]==1
-        assert e.stage()==3
+        assert e.stage()==12
         print('PASS: home/school/Alumina/ridge/woods re-entry; Kyle remains exclusively at home')
     finally:e.close()
 if __name__=='__main__':main()

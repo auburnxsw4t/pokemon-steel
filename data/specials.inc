@@ -642,3 +642,4 @@ gSpecials::
 	def_special SteelSetPlayerIdentity
 	def_special SteelNamePlayer, waitstate=1
 	def_special SteelSyncOpeningActors
+	def_special StartLoganTutorialBattle, waitstate=1

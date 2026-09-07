@@ -1,4 +1,5 @@
 #include "global.h"
+#include "pokemon_steel.h"
 #include "data.h"
 #include "main.h"
 #include "battle.h"
@@ -512,6 +513,20 @@ void StartWallyTutorialBattle(void)
     CreateMaleMon(&gParties[B_TRAINER_OPPONENT_A][0], SPECIES_RALTS, 5);
     LockPlayerFieldControls();
     gMain.savedCallback = CB2_ReturnToFieldContinueScriptPlayMapMusic;
+    gBattleTypeFlags = BATTLE_TYPE_CATCH_TUTORIAL;
+    CreateBattleStartTask(B_TRANSITION_SLICE, 0);
+}
+
+// Steel's borrowed-party tutorial has its own controller and restoration path.
+void StartLoganTutorialBattle(void)
+{
+    if (!SteelPrepareLoganTutorial())
+    {
+        CreateTask(SteelResumeFailedTutorial, 0);
+        return;
+    }
+    LockPlayerFieldControls();
+    gMain.savedCallback = SteelEndLoganTutorial;
     gBattleTypeFlags = BATTLE_TYPE_CATCH_TUTORIAL;
     CreateBattleStartTask(B_TRANSITION_SLICE, 0);
 }
