@@ -1,4 +1,5 @@
 Steel_FamilyHome_MapScripts::
+	map_script MAP_SCRIPT_ON_LOAD, Steel_FamilyHome_SyncActors
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, Steel_Home_OnFrame
 	.byte 0
 
@@ -41,3 +42,7 @@ Steel_Home_Text_Madison:
 Steel_Home_Text_Kyle:
 	.string "KYLE: Don't take all day choosing.\n"
 	.string "I'm ready for our first battle!$"
+
+Steel_FamilyHome_SyncActors:
+	special SteelSyncOpeningActors
+	end

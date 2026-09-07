@@ -641,3 +641,4 @@ gSpecials::
 
 	def_special SteelSetPlayerIdentity
 	def_special SteelNamePlayer, waitstate=1
+	def_special SteelSyncOpeningActors

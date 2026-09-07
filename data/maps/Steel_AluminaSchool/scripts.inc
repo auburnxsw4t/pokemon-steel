@@ -1,4 +1,5 @@
 Steel_AluminaSchool_MapScripts::
+	map_script MAP_SCRIPT_ON_LOAD, Steel_AluminaSchool_SyncActors
 	map_script MAP_SCRIPT_ON_TRANSITION, Steel_School_OnTransition
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, Steel_School_OnFrame
 	.byte 0
@@ -33,6 +34,8 @@ Steel_School_ConfirmName:
 	msgbox Steel_School_Text_Dismissed, MSGBOX_DEFAULT
 	msgbox Steel_School_Text_Kyle, MSGBOX_DEFAULT
 	setvar VAR_STEEL_OPENING, STEEL_OPENING_DISMISSED
+	special SteelSyncOpeningActors
+	removeobject LOCALID_STEEL_SCHOOL_KYLE
 	releaseall
 	end
 
@@ -79,3 +82,7 @@ Steel_School_Text_Kyle:
 Steel_School_Text_Classmate:
 	.string "No more homework!\n"
 	.string "I'm going to miss everyone, though.$"
+
+Steel_AluminaSchool_SyncActors:
+	special SteelSyncOpeningActors
+	end

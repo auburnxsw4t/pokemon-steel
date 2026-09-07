@@ -1,4 +1,5 @@
 Steel_HomesteadRidge_MapScripts::
+	map_script MAP_SCRIPT_ON_LOAD, Steel_HomesteadRidge_SyncActors
 	map_script MAP_SCRIPT_ON_TRANSITION, Steel_Ridge_OnTransition
 	map_script MAP_SCRIPT_ON_FRAME_TABLE, Steel_Ridge_OnFrame
 	.byte 0
@@ -24,6 +25,7 @@ Steel_Ridge_WalkHome::
 	applymovement OBJ_EVENT_ID_PLAYER, Steel_Ridge_Movement_PlayerHome
 	waitmovement 0
 	setvar VAR_STEEL_OPENING, STEEL_OPENING_HOME
+	special SteelSyncOpeningActors
 	releaseall
 	end
 
@@ -82,3 +84,7 @@ Steel_Ridge_Text_Neighbor:
 Steel_Ridge_Text_RoadClosed:
 	.string "I should meet up with Dad before\n"
 	.string "heading out of the neighborhood.$"
+
+Steel_HomesteadRidge_SyncActors:
+	special SteelSyncOpeningActors
+	end
