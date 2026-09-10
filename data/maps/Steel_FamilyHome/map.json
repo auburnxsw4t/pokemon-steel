@@ -66,8 +66,9 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "0x0",
-      "flag": "0"
+      "script": "Steel_Home_PosskitBall",
+      "flag": "FLAG_HIDE_STEEL_STARTER_POSSKIT",
+      "local_id": "LOCALID_STEEL_HOME_POSSKIT_BALL"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_POKE_BALL",
@@ -79,8 +80,9 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "0x0",
-      "flag": "0"
+      "script": "Steel_Home_SheldoBall",
+      "flag": "FLAG_HIDE_STEEL_STARTER_SHELDO",
+      "local_id": "LOCALID_STEEL_HOME_SHELDO_BALL"
     },
     {
       "graphics_id": "OBJ_EVENT_GFX_POKE_BALL",
@@ -92,8 +94,9 @@
       "movement_range_y": 0,
       "trainer_type": "TRAINER_TYPE_NONE",
       "trainer_sight_or_berry_tree_id": "0",
-      "script": "0x0",
-      "flag": "0"
+      "script": "Steel_Home_MimbriBall",
+      "flag": "FLAG_HIDE_STEEL_STARTER_MIMBRI",
+      "local_id": "LOCALID_STEEL_HOME_MIMBRI_BALL"
     }
   ],
   "warp_events": [

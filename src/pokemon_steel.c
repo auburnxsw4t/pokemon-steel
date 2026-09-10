@@ -35,6 +35,7 @@ void SteelSyncOpeningActors(void)
     FlagSet(FLAG_HIDE_STEEL_KYLE_RIDGE);
     FlagSet(FLAG_HIDE_STEEL_KYLE_HOME);
     FlagSet(FLAG_HIDE_STEEL_KYLE_WOODS);
+    FlagSet(FLAG_HIDE_STEEL_KYLE_REGISTRATION);
     FlagSet(FLAG_HIDE_STEEL_WOODS_TARGET);
     switch (stage)
     {
@@ -43,8 +44,10 @@ void SteelSyncOpeningActors(void)
         break;
     case STEEL_OPENING_DISMISSED:
     case STEEL_OPENING_ALUMINA_WALK:
-    case STEEL_OPENING_COMPLETE:
         FlagClear(FLAG_HIDE_STEEL_KYLE_VILLAGE);
+        break;
+    case STEEL_OPENING_COMPLETE:
+        FlagClear(FLAG_HIDE_STEEL_KYLE_REGISTRATION);
         break;
     case STEEL_OPENING_RIDGE_HOME:
     case STEEL_OPENING_RIDGE_CREEK:

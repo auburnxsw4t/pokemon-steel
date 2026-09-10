@@ -267,8 +267,8 @@
 #define VAR_SCOTT_BF_CALL_STEP_COUNTER                   0x40F5
 #define VAR_RIVAL_RAYQUAZA_CALL_STEP_COUNTER             0x40F6
 #define VAR_STEEL_OPENING                                0x40F7 // Pokemon Steel opening progress
-#define VAR_UNUSED_0x40F8                                0x40F8 // Unused Var
-#define VAR_UNUSED_0x40F9                                0x40F9 // Unused Var
+#define VAR_STEEL_STARTER                                0x40F8 // Player's Steel starter choice
+#define VAR_STEEL_KYLE_STARTER                           0x40F9 // Kyle's Steel starter choice
 #define VAR_UNUSED_0x40FA                                0x40FA // Unused Var
 #define VAR_UNUSED_0x40FB                                0x40FB // Unused Var
 #define VAR_UNUSED_0x40FC                                0x40FC // Unused Var

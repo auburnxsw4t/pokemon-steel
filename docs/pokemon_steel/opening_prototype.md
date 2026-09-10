@@ -161,12 +161,24 @@ recomputed by `SteelSyncOpeningActors` from the persistent opening variable
 before map objects spawn. Each map's Kyle has a dedicated hide flag.
 
 Existing state values remain 0 (roll call), 1 (dismissed), 2 (home arrival),
-and 3 (ready for creek). State 4 is the Homestead escort. Additional stages
-will be appended for the catching demonstration and subsequent opening flow.
+3 (ready for creek), and 4 (Homestead escort). Appended values cover the
+Alumina walk, creek departure, catching demonstration, return home, starter
+choice, Kyle battle, Kyle departure, completion, and tutorial retry without
+renumbering the original save values.
 
-The catching demonstration and placeholder starter handoff are the next
-increment. No custom starter species have been added. Service buildings in
-Alumina are exterior placeholders, and population/detail work remains.
+Logan's catching demonstration borrows a Scizor and restores the player's
+party, inventory, money, Pokédex, and battle state afterward. The family-home
+display offers all three placeholder starters with confirmation. Kyle chooses
+the future type counter, and the early-rival battle continues after either a
+win or loss. The starter is healed afterward, Madison gives the Silk Scarf,
+and Kyle moves to the League Registration exterior before free play begins.
+
+No custom starter species have been added. The current mappings remain
+Posskit/Zigzagoon, Sheldo/Sandshrew, and Mimbri/Taillow. Service buildings in
+Alumina are exterior placeholders, and population/detail work remains. The
+Chapter 1 Southwoods and Route 1 V2 construction archive is preserved under
+`docs/pokemon_steel/reference/chapter1/` for its own future map ticket; those
+stubs were not rebuilt as part of the opening gameplay milestone.
 
 ### Verification
 
@@ -177,7 +189,11 @@ Alumina are exterior placeholders, and population/detail work remains.
 - `python3 dev_scripts/test_steel_opening_emulator.py /path/to/steel-mgba-runner`
   boots a new game, completes the classroom and escorts, then walks back
   through school, Alumina, Homestead Ridge, and the woods. Kyle remains
-  exclusively assigned to the family home after these visits.
+  exclusively assigned to the correct story location after these visits.
+- `python3 dev_scripts/test_steel_starters_emulator.py /path/to/steel-mgba-runner`
+  runs three fresh openings, verifies all player/counter pairs, forces both
+  rival outcomes, and checks the retained starter, healing, Silk Scarf, ball
+  visibility, free movement, home re-entry, and Kyle at League Registration.
 - `dev_scripts/steel_mgba_runner.c` builds against mGBA's core library with
   that library's compile definitions. The runner used here is mGBA 0.10.5.
 

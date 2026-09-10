@@ -44,6 +44,20 @@
       "script": "Steel_Village_Kyle",
       "flag": "FLAG_HIDE_STEEL_KYLE_VILLAGE",
       "local_id": "LOCALID_STEEL_VILLAGE_KYLE"
+    },
+    {
+      "graphics_id": "OBJ_EVENT_GFX_RIVAL_BRENDAN_NORMAL",
+      "x": 33,
+      "y": 27,
+      "elevation": 3,
+      "movement_type": "MOVEMENT_TYPE_FACE_UP",
+      "movement_range_x": 0,
+      "movement_range_y": 0,
+      "trainer_type": "TRAINER_TYPE_NONE",
+      "trainer_sight_or_berry_tree_id": "0",
+      "script": "Steel_Village_KyleAtRegistration",
+      "flag": "FLAG_HIDE_STEEL_KYLE_REGISTRATION",
+      "local_id": "LOCALID_STEEL_VILLAGE_KYLE_REGISTRATION"
     }
   ],
   "warp_events": [

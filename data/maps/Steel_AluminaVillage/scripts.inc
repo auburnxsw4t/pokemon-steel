@@ -125,7 +125,12 @@ Steel_Village_LastSteps:
 	step_end
 
 Steel_Village_Kyle::
+	goto_if_eq VAR_STEEL_OPENING, STEEL_OPENING_COMPLETE, Steel_Village_KyleAtRegistration
 	msgbox Steel_Village_Text_League, MSGBOX_SIGN
+	end
+
+Steel_Village_KyleAtRegistration::
+	msgbox Steel_Village_Text_KyleRegistration, MSGBOX_NPC
 	end
 
 Steel_Village_SchoolSign::
@@ -171,6 +176,10 @@ Steel_Village_Text_Race:
 Steel_Village_Text_Home:
 	.string "KYLE: Homestead Ridge is just west\n"
 	.string "of here. We're nearly home.$"
+
+Steel_Village_Text_KyleRegistration:
+	.string "KYLE: I'm registering first.\n"
+	.string "Don't fall too far behind.$"
 
 Steel_Village_Text_School:
 	.string "ALUMINA SCHOOL$"

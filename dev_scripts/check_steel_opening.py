@@ -16,7 +16,7 @@ def check_actors():
     function = source[start:i]
     flags = re.findall(r'^#define (FLAG_HIDE_STEEL_\w+) (0x[0-9A-Fa-f]+)', (ROOT/'include/constants/flags.h').read_text(), re.M)
     definitions = '\n'.join('#define %s %s' % f for f in flags)
-    expected = {0: 'SCHOOL', 1: 'VILLAGE', 2: 'HOME', 3: 'HOME', 4: 'RIDGE', 5: 'VILLAGE', 6: 'HOME', 7: 'RIDGE', 8: 'WOODS', 9: 'WOODS', 10: 'RIDGE', 11: 'HOME', 12: 'HOME', 13: 'HOME', 14: 'HOME', 15: 'VILLAGE', 16: 'WOODS'}
+    expected = {0: 'SCHOOL', 1: 'VILLAGE', 2: 'HOME', 3: 'HOME', 4: 'RIDGE', 5: 'VILLAGE', 6: 'HOME', 7: 'RIDGE', 8: 'WOODS', 9: 'WOODS', 10: 'RIDGE', 11: 'HOME', 12: 'HOME', 13: 'HOME', 14: 'HOME', 15: 'REGISTRATION', 16: 'WOODS'}
     checks = '\n'.join('stage=%d; SteelSyncOpeningActors(); assert(!hidden[FLAG_HIDE_STEEL_KYLE_%s]); assert(visible()==1);' % (stage, actor) for stage, actor in expected.items())
     c = ('#include <stdint.h>\n#include <assert.h>\n#include "constants/pokemon_steel.h"\ntypedef uint16_t u16;\n'
          + definitions + '\n#define VAR_STEEL_OPENING 0\nstatic u16 stage; static unsigned char hidden[4096];\n'
@@ -68,8 +68,78 @@ def check_maps():
     south_blocks = struct.unpack('<' + 'H' * (len(south_raw) // 2), south_raw)
     assert 0x00D in {b & 0x3ff for b in south_blocks}, 'South Woods has no tall grass'
     assert maps['Steel_FamilyHome_2F']['layout'] == 'LAYOUT_STEEL_FAMILY_HOME_2F'
+    registration_kyle = next(o for o in maps['Steel_AluminaVillage']['object_events']
+                             if o.get('local_id') == 'LOCALID_STEEL_VILLAGE_KYLE_REGISTRATION')
+    assert (registration_kyle['x'], registration_kyle['y']) == (33, 27)
+    assert registration_kyle['flag'] == 'FLAG_HIDE_STEEL_KYLE_REGISTRATION'
     print('PASS: map sizes, topology, tall-grass target, NPC collision tiles, Kyle hide flags, and destination warps')
+
+def check_starter_flow():
+    maps = {p.parent.name: json.loads(p.read_text()) for p in (ROOT/'data/maps').glob('Steel_*/map.json')}
+    home = maps['Steel_FamilyHome']
+    balls = [o for o in home['object_events'] if o['graphics_id'] == 'OBJ_EVENT_GFX_POKE_BALL']
+    assert len(balls) == 3, 'the downstairs trainer display must contain exactly three balls'
+    expected_balls = {
+        'LOCALID_STEEL_HOME_POSSKIT_BALL': ('Steel_Home_PosskitBall', 'FLAG_HIDE_STEEL_STARTER_POSSKIT'),
+        'LOCALID_STEEL_HOME_SHELDO_BALL': ('Steel_Home_SheldoBall', 'FLAG_HIDE_STEEL_STARTER_SHELDO'),
+        'LOCALID_STEEL_HOME_MIMBRI_BALL': ('Steel_Home_MimbriBall', 'FLAG_HIDE_STEEL_STARTER_MIMBRI'),
+    }
+    assert {o['local_id'] for o in balls} == set(expected_balls)
+    for ball in balls:
+        assert (ball['script'], ball['flag']) == expected_balls[ball['local_id']]
+    assert maps['Steel_FamilyHome_2F']['object_events'] == [], 'starter balls must not appear upstairs'
+
+    scripts = (ROOT/'data/maps/Steel_FamilyHome/scripts.inc').read_text()
+    def section(label):
+        match = re.search(r'^' + re.escape(label) + r'::\n(.*?)(?=^\w[^\n]*::?\n|\Z)', scripts, re.M | re.S)
+        assert match, label
+        return match.group(1)
+    choices = {
+        'Posskit': ('STEEL_STARTER_CHOICE_POSSKIT', 'STEEL_STARTER_POSSKIT', 'STEEL_STARTER_CHOICE_MIMBRI',
+                    ('POSSKIT', 'MIMBRI')),
+        'Sheldo': ('STEEL_STARTER_CHOICE_SHELDO', 'STEEL_STARTER_SHELDO', 'STEEL_STARTER_CHOICE_POSSKIT',
+                   ('SHELDO', 'POSSKIT')),
+        'Mimbri': ('STEEL_STARTER_CHOICE_MIMBRI', 'STEEL_STARTER_MIMBRI', 'STEEL_STARTER_CHOICE_SHELDO',
+                   ('MIMBRI', 'SHELDO')),
+    }
+    for name, (player, species, kyle, hidden) in choices.items():
+        body = section('Steel_Home_Choose' + name)
+        assert f'setvar VAR_STEEL_STARTER, {player}' in body
+        assert f'setvar VAR_STEEL_KYLE_STARTER, {kyle}' in body
+        assert f'givemon {species}, 5' in body
+        for mon in hidden:
+            assert f'setflag FLAG_HIDE_STEEL_STARTER_{mon.upper()}' in body
+            assert f'removeobject LOCALID_STEEL_HOME_{mon.upper()}_BALL' in body
+    for mon in ('Posskit', 'Sheldo', 'Mimbri'):
+        body = section('Steel_Home_' + mon + 'Ball')
+        assert 'MSGBOX_YESNO' in body and f'Steel_Home_Choose{mon}' in body
+
+    battles = {
+        'Posskit': 'TRAINER_KYLE_POSSKIT',
+        'Sheldo': 'TRAINER_KYLE_SHELDO',
+        'Mimbri': 'TRAINER_KYLE_MIMBRI',
+    }
+    for mon, trainer in battles.items():
+        body = section('Steel_Home_BattleKyle' + mon)
+        assert f'trainerbattle_earlyrival {trainer}, RIVAL_BATTLE_HEAL_AFTER' in body
+        assert 'goto Steel_Home_AfterKyleBattle' in body
+    assert 'KYLE: That was luck.' in scripts
+    assert "That's about what I expected." in scripts
+    assert 'special HealPlayerParty' in section('Steel_Home_AfterKyleBattle')
+    assert 'setvar VAR_STEEL_OPENING, STEEL_OPENING_KYLE_LEAVES' in section('Steel_Home_AfterKyleBattle')
+    assert 'giveitem ITEM_SILK_SCARF' in section('Steel_Home_GiveSilkScarf')
+    assert 'setflag FLAG_RECEIVED_STEEL_SILK_SCARF' in section('Steel_Home_GiveSilkScarf')
+    assert 'setvar VAR_STEEL_OPENING, STEEL_OPENING_COMPLETE' in section('Steel_Home_KyleDeparts')
+
+    parties = (ROOT/'src/data/trainers.party').read_text()
+    for trainer, species in [('TRAINER_KYLE_POSSKIT', 'Zigzagoon'),
+                             ('TRAINER_KYLE_SHELDO', 'Sandshrew'),
+                             ('TRAINER_KYLE_MIMBRI', 'Taillow')]:
+        match = re.search(r'^=== ' + trainer + r' ===\n(.*?)(?=^=== |\Z)', parties, re.M | re.S)
+        assert match and re.search(r'^' + species + r'\nLevel: 5$', match.group(1), re.M), (trainer, species)
+    print('PASS: three starter choices, Kyle counter teams, rival outcome flow, reward, and departure state')
 
 if __name__ == '__main__':
     check_actors()
     check_maps()
+    check_starter_flow()
