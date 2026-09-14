@@ -30,6 +30,12 @@ void SteelNamePlayer(void)
 void SteelSyncOpeningActors(void)
 {
     u16 stage = VarGet(VAR_STEEL_OPENING);
+    u16 registration = VarGet(VAR_STEEL_REGISTRATION);
+    if (stage == STEEL_OPENING_COMPLETE && registration == STEEL_REGISTRATION_NONE)
+    {
+        registration = STEEL_REGISTRATION_ACTIVE;
+        VarSet(VAR_STEEL_REGISTRATION, registration);
+    }
     FlagSet(FLAG_HIDE_STEEL_KYLE_SCHOOL);
     FlagSet(FLAG_HIDE_STEEL_KYLE_VILLAGE);
     FlagSet(FLAG_HIDE_STEEL_KYLE_RIDGE);
@@ -47,7 +53,8 @@ void SteelSyncOpeningActors(void)
         FlagClear(FLAG_HIDE_STEEL_KYLE_VILLAGE);
         break;
     case STEEL_OPENING_COMPLETE:
-        FlagClear(FLAG_HIDE_STEEL_KYLE_REGISTRATION);
+        if (registration != STEEL_REGISTRATION_COMPLETE)
+            FlagClear(FLAG_HIDE_STEEL_KYLE_REGISTRATION);
         break;
     case STEEL_OPENING_RIDGE_HOME:
     case STEEL_OPENING_RIDGE_CREEK:

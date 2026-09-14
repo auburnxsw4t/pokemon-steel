@@ -9402,6 +9402,17 @@
       "layout_version": "emerald"
     },
     {
+      "id": "LAYOUT_STEEL_LEAGUE_REGISTRATION",
+      "name": "Steel_LeagueRegistration_Layout",
+      "width": 19,
+      "height": 9,
+      "primary_tileset": "gTileset_Building",
+      "secondary_tileset": "gTileset_Facility",
+      "border_filepath": "data/layouts/Steel_LeagueRegistration/border.bin",
+      "blockdata_filepath": "data/layouts/Steel_LeagueRegistration/map.bin",
+      "layout_version": "emerald"
+    },
+    {
       "id": "LAYOUT_STEEL_FAMILY_HOME",
       "name": "Steel_FamilyHome_Layout",
       "width": 11,

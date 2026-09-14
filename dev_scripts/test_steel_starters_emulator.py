@@ -74,9 +74,7 @@ def run_choice(runner, choice):
         assert emulator.party_hp() == emulator.party_max_hp() > 0, (name, 'starter not healed')
         assert emulator.flag(0x2c), (name, 'Silk Scarf flag')
         assert emulator.item_quantity(emulator.item_silk_scarf) >= 1, (name, 'Silk Scarf missing')
-        assert all(emulator.flag(flag) for flag in hidden_flags), (name, 'chosen balls visible')
-        remaining = {0x29, 0x2a, 0x2b} - set(hidden_flags)
-        assert len(remaining) == 1 and not emulator.flag(remaining.pop()), (name, 'Logan ball hidden')
+        assert all(emulator.flag(flag) for flag in {0x29, 0x2a, 0x2b}), (name, 'starter display not cleared')
         emulator.assert_kyle('REGISTRATION')
 
         # Normal control is restored, and home can be exited and re-entered.
@@ -102,7 +100,17 @@ def run_choice(runner, choice):
         emulator.goto(32, 27)
         emulator.step(60)
         assert emulator.object_position(2) == (33, 27), (name, 'Kyle registration position', emulator.object_position(2))
-        print(f'PASS: {name}, Kyle counter, outcome {outcome}, reward, healing, and home re-entry')
+        emulator.goto(32, 26)
+        emulator.goto(33, 26)
+        emulator.walk(64, 24)
+        emulator.step(100)
+        assert emulator.location()[1] == 9, (name, 'registration entry', emulator.location())
+        emulator.goto(5, 5)
+        emulator.walk(64, 16)
+        emulator.tap(1)
+        emulator.advance(lambda: emulator.var(0xfa) == 2)
+        assert emulator.flag(0x39), (name, 'registration completion flag')
+        print(f'PASS: {name}, Kyle counter, outcome {outcome}, reward, home re-entry, and Registration hook')
     finally:
         emulator.close()
 

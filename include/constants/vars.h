@@ -269,7 +269,7 @@
 #define VAR_STEEL_OPENING                                0x40F7 // Pokemon Steel opening progress
 #define VAR_STEEL_STARTER                                0x40F8 // Player's Steel starter choice
 #define VAR_STEEL_KYLE_STARTER                           0x40F9 // Kyle's Steel starter choice
-#define VAR_UNUSED_0x40FA                                0x40FA // Unused Var
+#define VAR_STEEL_REGISTRATION                           0x40FA // Ferrane League registration state
 #define VAR_UNUSED_0x40FB                                0x40FB // Unused Var
 #define VAR_UNUSED_0x40FC                                0x40FC // Unused Var
 #define VAR_UNUSED_0x40FD                                0x40FD // Unused Var

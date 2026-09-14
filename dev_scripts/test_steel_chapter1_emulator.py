@@ -149,7 +149,48 @@ def main():
                 break
         else:
             raise AssertionError('Route 1 grass did not start a wild encounter')
-        print('PASS: both Southwoods trailheads, South Trail, full Route 1 traversal, and live wild grass')
+        # Let the wild battle initialize, then force the sole party member to
+        # faint. This exercises the game's real whiteout path, including its
+        # heal-location lookup, rather than merely inspecting the configured id.
+        for _ in range(400):
+            if (emulator.u32(emulator.sym('gBattleTypeFlags'))
+                    and emulator.battle_species(0) and emulator.battle_species(1)):
+                break
+            emulator.step(2, 1)
+            emulator.step(18)
+        else:
+            raise AssertionError('wild battle did not initialize')
+        emulator.set_battle_hp(0, 0)
+        emulator.write(emulator.sym('gParties') + emulator.mon_hp_offset, 0, 2)
+        emulator.advance(lambda: emulator.location()[1] == 2 and emulator.player() == (8, 7),
+                         limit=50000)
+        emulator.step(240)
+        assert emulator.stage() == 15, ('story state changed after whiteout', emulator.stage())
+        assert emulator.location() == (75, 2), ('whiteout left Steel maps', emulator.location())
+        assert emulator.party_hp() == emulator.party_max_hp() > 0, 'whiteout did not heal the party'
+
+        # Use the game's own Save menu, clone the emulated cartridge data, then
+        # reset and Continue from it. No developer/player .sav is touched.
+        emulator.tap(8)  # Start
+        emulator.step(80)
+        for _ in range(3):  # POKéMON, BAG, PLAYER, SAVE
+            emulator.tap(128)
+        emulator.tap(1)
+        for _ in range(30):
+            emulator.tap(1)
+        cartridge = '/tmp/steel-chapter1-after-whiteout.sav'
+        emulator.cmd('cartsave ' + cartridge)
+        emulator.cmd('cartload ' + cartridge)
+        emulator.cmd('reset')
+        emulator.step(400)
+        emulator.tap(8)
+        emulator.step(80)
+        emulator.tap(1)  # Continue
+        emulator.advance(lambda: emulator.stage() == 15
+                         and emulator.location() == (75, 2)
+                         and emulator.player() == (8, 7), limit=30000)
+        assert emulator.party_hp() == emulator.party_max_hp() > 0
+        print('PASS: both forest trailheads, South Trail, Route 1 wild battle, Steel-family-home whiteout, and cartridge save/reload')
     finally:
         emulator.close()
 

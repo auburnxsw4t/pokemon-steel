@@ -1741,6 +1741,7 @@ EventScript_PalletTown_PlayersHouse_2F_TurnOnPC::
 	.include "data/scripts/wild_encounter.inc"
 
 	.include "data/maps/Steel_AluminaSchool/scripts.inc"
+	.include "data/maps/Steel_LeagueRegistration/scripts.inc"
 	.include "data/maps/Steel_HomesteadRidge/scripts.inc"
 	.include "data/maps/Steel_FamilyHome/scripts.inc"
 	.include "data/maps/Steel_FamilyHome_2F/scripts.inc"

@@ -118,6 +118,15 @@ Steel_Home_ChoosePosskit::
 	waitmovement LOCALID_STEEL_HOME_KYLE
 	removeobject LOCALID_STEEL_HOME_MIMBRI_BALL
 	msgbox Steel_Home_Text_KyleTakesMimbri, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_STEEL_HOME_LOGAN, Steel_Home_LoganTakesMiddleBall
+	waitmovement LOCALID_STEEL_HOME_LOGAN
+	setflag FLAG_HIDE_STEEL_STARTER_SHELDO
+	removeobject LOCALID_STEEL_HOME_SHELDO_BALL
+	msgbox Steel_Home_Text_LoganTakesUnused, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_STEEL_HOME_LOGAN, Steel_Home_LoganReturnsFromMiddleBall
+	waitmovement LOCALID_STEEL_HOME_LOGAN
 	goto Steel_Home_StartKyleBattle
 	end
 
@@ -137,6 +146,15 @@ Steel_Home_ChooseSheldo::
 	waitmovement LOCALID_STEEL_HOME_KYLE
 	removeobject LOCALID_STEEL_HOME_POSSKIT_BALL
 	msgbox Steel_Home_Text_KyleTakesPosskit, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_STEEL_HOME_LOGAN, Steel_Home_LoganTakesRightBall
+	waitmovement LOCALID_STEEL_HOME_LOGAN
+	setflag FLAG_HIDE_STEEL_STARTER_MIMBRI
+	removeobject LOCALID_STEEL_HOME_MIMBRI_BALL
+	msgbox Steel_Home_Text_LoganTakesUnused, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_STEEL_HOME_LOGAN, Steel_Home_LoganReturnsFromRightBall
+	waitmovement LOCALID_STEEL_HOME_LOGAN
 	goto Steel_Home_StartKyleBattle
 	end
 
@@ -156,6 +174,15 @@ Steel_Home_ChooseMimbri::
 	waitmovement LOCALID_STEEL_HOME_KYLE
 	removeobject LOCALID_STEEL_HOME_SHELDO_BALL
 	msgbox Steel_Home_Text_KyleTakesSheldo, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_STEEL_HOME_LOGAN, Steel_Home_LoganTakesLeftBall
+	waitmovement LOCALID_STEEL_HOME_LOGAN
+	setflag FLAG_HIDE_STEEL_STARTER_POSSKIT
+	removeobject LOCALID_STEEL_HOME_POSSKIT_BALL
+	msgbox Steel_Home_Text_LoganTakesUnused, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_STEEL_HOME_LOGAN, Steel_Home_LoganReturnsFromLeftBall
+	waitmovement LOCALID_STEEL_HOME_LOGAN
 	goto Steel_Home_StartKyleBattle
 	end
 
@@ -196,26 +223,51 @@ Steel_Home_AfterKyleBattle::
 Steel_Home_GiveSilkScarf::
 	goto_if_set FLAG_RECEIVED_STEEL_SILK_SCARF, Steel_Home_KyleDeparts
 	closemessage
-	applymovement LOCALID_STEEL_HOME_MADISON, Steel_Home_MadisonApproaches
-	waitmovement LOCALID_STEEL_HOME_MADISON
+	switch VAR_STEEL_STARTER
+	case STEEL_STARTER_CHOICE_POSSKIT, Steel_Home_MadisonApproachPosskit
+	case STEEL_STARTER_CHOICE_SHELDO, Steel_Home_MadisonApproachSheldo
+	case STEEL_STARTER_CHOICE_MIMBRI, Steel_Home_MadisonApproachMimbri
+	end
+
+Steel_Home_MadisonGivesScarf::
 	msgbox Steel_Home_Text_MadisonGift, MSGBOX_DEFAULT
 	giveitem ITEM_SILK_SCARF
 	goto_if_eq VAR_RESULT, FALSE, Steel_Home_NoRoomForScarf
 	setflag FLAG_RECEIVED_STEEL_SILK_SCARF
-	goto Steel_Home_KyleDeparts
+	goto Steel_Home_MadisonReturns
 	end
 
 Steel_Home_NoRoomForScarf::
 	msgbox Steel_Home_Text_NoRoomForScarf, MSGBOX_DEFAULT
+	goto Steel_Home_MadisonReturns
+	end
+
+Steel_Home_MadisonReturns::
+	closemessage
+	switch VAR_STEEL_STARTER
+	case STEEL_STARTER_CHOICE_POSSKIT, Steel_Home_MadisonReturnPosskit
+	case STEEL_STARTER_CHOICE_SHELDO, Steel_Home_MadisonReturnSheldo
+	case STEEL_STARTER_CHOICE_MIMBRI, Steel_Home_MadisonReturnMimbri
+	end
+
+Steel_Home_AfterMadisonReturns::
+	goto_if_set FLAG_RECEIVED_STEEL_SILK_SCARF, Steel_Home_KyleDeparts
 	releaseall
 	end
 
 Steel_Home_KyleDeparts::
 	msgbox Steel_Home_Text_KyleDeparts, MSGBOX_DEFAULT
 	closemessage
-	applymovement LOCALID_STEEL_HOME_KYLE, Steel_Home_KyleExitForLeague
-	waitmovement LOCALID_STEEL_HOME_KYLE
+	switch VAR_STEEL_KYLE_STARTER
+	case STEEL_STARTER_CHOICE_POSSKIT, Steel_Home_KyleExitFromLeft
+	case STEEL_STARTER_CHOICE_SHELDO, Steel_Home_KyleExitFromMiddle
+	case STEEL_STARTER_CHOICE_MIMBRI, Steel_Home_KyleExitFromRight
+	end
+
+Steel_Home_KyleFinishesExit::
 	removeobject LOCALID_STEEL_HOME_KYLE
+	setrespawn HEAL_LOCATION_STEEL_FAMILY_HOME
+	setvar VAR_STEEL_REGISTRATION, STEEL_REGISTRATION_ACTIVE
 	setvar VAR_STEEL_OPENING, STEEL_OPENING_COMPLETE
 	special SteelSyncOpeningActors
 	releaseall
@@ -223,11 +275,13 @@ Steel_Home_KyleDeparts::
 
 Steel_Home_KyleTakesLeftBall:
 	walk_up
+	walk_up
 	face_up
 	step_end
 
 Steel_Home_KyleTakesMiddleBall:
 	walk_right
+	walk_up
 	walk_up
 	face_up
 	step_end
@@ -236,15 +290,206 @@ Steel_Home_KyleTakesRightBall:
 	walk_right
 	walk_right
 	walk_up
+	walk_up
 	face_up
 	step_end
 
-Steel_Home_MadisonApproaches:
+Steel_Home_LoganTakesLeftBall:
+	walk_right
+	walk_right
+	walk_up
+	walk_up
+	face_up
+	step_end
+
+Steel_Home_LoganTakesMiddleBall:
+	walk_right
+	walk_right
+	walk_right
+	walk_up
+	walk_up
+	face_up
+	step_end
+
+Steel_Home_LoganTakesRightBall:
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_up
+	walk_up
+	face_up
+	step_end
+
+Steel_Home_LoganReturnsFromLeftBall:
+	walk_down
+	walk_left
+	walk_left
+	walk_down
+	step_end
+
+Steel_Home_LoganReturnsFromMiddleBall:
+	walk_down
+	walk_left
+	walk_left
+	walk_left
+	walk_down
+	step_end
+
+Steel_Home_LoganReturnsFromRightBall:
+	walk_down
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_down
+	step_end
+
+Steel_Home_MadisonApproachPosskit:
+	applymovement LOCALID_STEEL_HOME_MADISON, Steel_Home_MadisonApproachPosskitMovement
+	waitmovement LOCALID_STEEL_HOME_MADISON
+	goto Steel_Home_MadisonGivesScarf
+
+Steel_Home_MadisonApproachSheldo:
+	applymovement LOCALID_STEEL_HOME_MADISON, Steel_Home_MadisonApproachSheldoMovement
+	waitmovement LOCALID_STEEL_HOME_MADISON
+	goto Steel_Home_MadisonGivesScarf
+
+Steel_Home_MadisonApproachMimbri:
+	applymovement LOCALID_STEEL_HOME_MADISON, Steel_Home_MadisonApproachMimbriMovement
+	waitmovement LOCALID_STEEL_HOME_MADISON
+	goto Steel_Home_MadisonGivesScarf
+
+Steel_Home_MadisonReturnPosskit:
+	applymovement LOCALID_STEEL_HOME_MADISON, Steel_Home_MadisonReturnPosskitMovement
+	waitmovement LOCALID_STEEL_HOME_MADISON
+	goto Steel_Home_AfterMadisonReturns
+
+Steel_Home_MadisonReturnSheldo:
+	applymovement LOCALID_STEEL_HOME_MADISON, Steel_Home_MadisonReturnSheldoMovement
+	waitmovement LOCALID_STEEL_HOME_MADISON
+	goto Steel_Home_AfterMadisonReturns
+
+Steel_Home_MadisonReturnMimbri:
+	applymovement LOCALID_STEEL_HOME_MADISON, Steel_Home_MadisonReturnMimbriMovement
+	waitmovement LOCALID_STEEL_HOME_MADISON
+	goto Steel_Home_AfterMadisonReturns
+
+Steel_Home_KyleExitFromLeft:
+	applymovement LOCALID_STEEL_HOME_KYLE, Steel_Home_KyleExitFromLeftMovement
+	waitmovement LOCALID_STEEL_HOME_KYLE
+	goto Steel_Home_KyleFinishesExit
+
+Steel_Home_KyleExitFromMiddle:
+	applymovement LOCALID_STEEL_HOME_KYLE, Steel_Home_KyleExitFromMiddleMovement
+	waitmovement LOCALID_STEEL_HOME_KYLE
+	goto Steel_Home_KyleFinishesExit
+
+Steel_Home_KyleExitFromRight:
+	applymovement LOCALID_STEEL_HOME_KYLE, Steel_Home_KyleExitFromRightMovement
+	waitmovement LOCALID_STEEL_HOME_KYLE
+	goto Steel_Home_KyleFinishesExit
+
+Steel_Home_MadisonApproachPosskitMovement:
 	walk_up
 	walk_right
 	walk_right
-	face_right
+	walk_down
+	walk_right
+	walk_right
+	walk_right
+	walk_up
+	face_up
 	step_end
+
+Steel_Home_MadisonApproachSheldoMovement:
+	walk_up
+	walk_right
+	walk_right
+	walk_down
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_up
+	face_up
+	step_end
+
+Steel_Home_MadisonApproachMimbriMovement:
+	walk_up
+	walk_right
+	walk_right
+	walk_down
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_right
+	walk_up
+	face_up
+	step_end
+
+Steel_Home_MadisonReturnPosskitMovement:
+	walk_down
+	walk_left
+	walk_left
+	walk_left
+	walk_up
+	walk_left
+	walk_left
+	walk_down
+	step_end
+
+Steel_Home_MadisonReturnSheldoMovement:
+	walk_down
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_up
+	walk_left
+	walk_left
+	walk_down
+	step_end
+
+Steel_Home_MadisonReturnMimbriMovement:
+	walk_down
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_up
+	walk_left
+	walk_left
+	walk_down
+	step_end
+
+Steel_Home_KyleExitFromLeftMovement:
+	walk_down
+	walk_down
+	walk_down
+	walk_right
+	walk_down
+	step_end
+
+Steel_Home_KyleExitFromMiddleMovement:
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	step_end
+
+Steel_Home_KyleExitFromRightMovement:
+	walk_down
+	walk_down
+	walk_down
+	walk_down
+	step_end
+
+Steel_Home_Text_LoganTakesUnused:
+	.string "LOGAN: I'll keep the third\n"
+	.string "partner safe here.$"
 
 Steel_Home_TrophySign::
 	msgbox Steel_Home_Text_Trophies, MSGBOX_SIGN

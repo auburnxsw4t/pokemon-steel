@@ -20,10 +20,10 @@ def check_actors():
     expected = {0: 'SCHOOL', 1: 'VILLAGE', 2: 'HOME', 3: 'HOME', 4: 'RIDGE', 5: 'VILLAGE', 6: 'HOME', 7: 'RIDGE', 8: 'WOODS', 9: 'WOODS', 10: 'RIDGE', 11: 'HOME', 12: 'HOME', 13: 'HOME', 14: 'HOME', 15: 'REGISTRATION', 16: 'WOODS'}
     checks = '\n'.join('stage=%d; SteelSyncOpeningActors(); assert(!hidden[FLAG_HIDE_STEEL_KYLE_%s]); assert(visible()==1);' % (stage, actor) for stage, actor in expected.items())
     c = ('#include <stdint.h>\n#include <assert.h>\n#include "constants/pokemon_steel.h"\ntypedef uint16_t u16;\n'
-         + definitions + '\n#define VAR_STEEL_OPENING 0\nstatic u16 stage; static unsigned char hidden[4096];\n'
-         + 'u16 VarGet(u16 id) { return stage; }\nvoid FlagSet(u16 f) { hidden[f]=1; }\nvoid FlagClear(u16 f) { hidden[f]=0; }\n'
+         + definitions + '\n#define VAR_STEEL_OPENING 0\n#define VAR_STEEL_REGISTRATION 1\nstatic u16 stage, registration=STEEL_REGISTRATION_ACTIVE; static unsigned char hidden[4096];\n'
+         + 'u16 VarGet(u16 id) { return id == VAR_STEEL_OPENING ? stage : registration; }\nvoid VarSet(u16 id, u16 value) { if (id == VAR_STEEL_REGISTRATION) registration=value; }\nvoid FlagSet(u16 f) { hidden[f]=1; }\nvoid FlagClear(u16 f) { hidden[f]=0; }\n'
          + function + '\nint visible(void) { return ' + '+'.join('!hidden[%s]' % f for f,_ in flags if 'KYLE' in f) + '; }\n'
-         + 'int main(void) { for(int pass=0;pass<4;pass++) { ' + checks + ' } return 0; }\n')
+         + 'int main(void) { for(int pass=0;pass<4;pass++) { registration=STEEL_REGISTRATION_ACTIVE; ' + checks + ' } return 0; }\n')
     with tempfile.TemporaryDirectory(prefix='steel-check-') as temp:
         path = Path(temp)/'actors.c'; path.write_text(c)
         exe = Path(temp)/'actors'
@@ -65,6 +65,10 @@ def check_maps():
     ridge_triggers = {e['script'] for e in maps['Steel_HomesteadRidge']['coord_events']}
     assert 'Steel_Village_ToSouthWoods' in village_triggers
     assert 'Steel_Ridge_ToSouthWoods' in ridge_triggers
+    assert {e['x'] for e in maps['Steel_AluminaVillage']['coord_events']
+            if e['script'] == 'Steel_Village_ToSouthWoods'} == {27, 28, 29, 30, 31}
+    assert {e['x'] for e in maps['Steel_SouthWoods']['coord_events']
+            if e['script'] == 'Steel_SouthWoods_ToAlumina'} == {27, 28, 29, 30, 31}
     woods = maps['Steel_CatchingWoods']
     target = next(o for o in woods['object_events'] if o.get('local_id') == 'LOCALID_STEEL_WOODS_TARGET')
     layout = layouts[woods['layout']]
@@ -132,6 +136,7 @@ def check_chapter1_construction():
 
 def check_starter_flow():
     maps = {p.parent.name: json.loads(p.read_text()) for p in (ROOT/'data/maps').glob('Steel_*/map.json')}
+    layouts = {l['id']:l for l in json.loads((ROOT/'data/layouts/layouts.json').read_text())['layouts']}
     home = maps['Steel_FamilyHome']
     balls = [o for o in home['object_events'] if o['graphics_id'] == 'OBJ_EVENT_GFX_POKE_BALL']
     assert len(balls) == 3, 'the downstairs trainer display must contain exactly three balls'
@@ -143,6 +148,12 @@ def check_starter_flow():
     assert {o['local_id'] for o in balls} == set(expected_balls)
     for ball in balls:
         assert (ball['script'], ball['flag']) == expected_balls[ball['local_id']]
+    home_layout = layouts[home['layout']]
+    home_raw = (ROOT/home_layout['blockdata_filepath']).read_bytes()
+    for ball in balls:
+        block = struct.unpack_from('<H', home_raw,
+                                   2 * (ball['y'] * home_layout['width'] + ball['x']))[0]
+        assert block & 0x3ff == 0x293, ('starter ball lacks display table', ball['local_id'], hex(block))
     assert maps['Steel_FamilyHome_2F']['object_events'] == [], 'starter balls must not appear upstairs'
 
     scripts = (ROOT/'data/maps/Steel_FamilyHome/scripts.inc').read_text()
@@ -183,9 +194,10 @@ def check_starter_flow():
     assert "That's about what I expected." in scripts
     assert 'special HealPlayerParty' in section('Steel_Home_AfterKyleBattle')
     assert 'setvar VAR_STEEL_OPENING, STEEL_OPENING_KYLE_LEAVES' in section('Steel_Home_AfterKyleBattle')
-    assert 'giveitem ITEM_SILK_SCARF' in section('Steel_Home_GiveSilkScarf')
-    assert 'setflag FLAG_RECEIVED_STEEL_SILK_SCARF' in section('Steel_Home_GiveSilkScarf')
-    assert 'setvar VAR_STEEL_OPENING, STEEL_OPENING_COMPLETE' in section('Steel_Home_KyleDeparts')
+    assert 'giveitem ITEM_SILK_SCARF' in section('Steel_Home_MadisonGivesScarf')
+    assert 'setflag FLAG_RECEIVED_STEEL_SILK_SCARF' in section('Steel_Home_MadisonGivesScarf')
+    assert 'setvar VAR_STEEL_OPENING, STEEL_OPENING_COMPLETE' in section('Steel_Home_KyleFinishesExit')
+    assert 'setrespawn HEAL_LOCATION_STEEL_FAMILY_HOME' in section('Steel_Home_KyleFinishesExit')
 
     parties = (ROOT/'src/data/trainers.party').read_text()
     for trainer, species in [('TRAINER_KYLE_POSSKIT', 'Zigzagoon'),

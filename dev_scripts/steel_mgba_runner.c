@@ -21,6 +21,7 @@ int main(int argc, char **argv)
     color_t *pixels = calloc(240 * 160, sizeof(color_t));
     core->setVideoBuffer(core, pixels, 240);
     if (!core->loadROM(core, VFileOpen(argv[1], O_RDONLY))) return 4;
+    if (!core->loadSave(core, VFileMemChunk(NULL, 128 * 1024))) return 11;
     core->reset(core);
     char line[1024], path[900];
     unsigned int a, b, c;
@@ -63,6 +64,28 @@ int main(int argc, char **argv)
             size_t size=core->stateSize(core);void *buf=malloc(size);FILE *f=fopen(path,"rb");
             if(!f || fread(buf,1,size,f)!=size)return 6;
             fclose(f);core->loadState(core,buf);free(buf);puts("ok");
+        }
+        else if (sscanf(line, "cartsave %899s", path) == 1)
+        {
+            void *sram = NULL;
+            size_t size = core->savedataClone(core, &sram);
+            FILE *f = fopen(path, "wb");
+            size_t written = f ? fwrite(sram, 1, size, f) : 0;
+            if (f) fclose(f);
+            free(sram);
+            if (written != size) printf("error %zu %zu\n", size, written);
+            else puts("ok");
+        }
+        else if (sscanf(line, "cartload %899s", path) == 1)
+        {
+            FILE *f = fopen(path, "rb");
+            if (!f) return 8;
+            fseek(f, 0, SEEK_END); size_t size = ftell(f); rewind(f);
+            void *sram = malloc(size);
+            if (fread(sram, 1, size, f) != size) return 9;
+            fclose(f);
+            if (!core->savedataRestore(core, sram, size, false)) return 10;
+            free(sram); puts("ok");
         }
         else if (sscanf(line,"reg %899s",path)==1) {a=0;core->readRegister(core,path,&a);printf("%08x\n",a);}
         else if (!strncmp(line,"reset",5)) {core->reset(core);puts("ok");}

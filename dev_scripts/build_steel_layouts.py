@@ -60,7 +60,7 @@ def semantic_grid(filename):
 def semantic_map(grid):
     h,w=len(grid),len(grid[0])
     result=Map(w,h)
-    result.trees(0,0,w,h)
+    tree_w,tree_src=blocks('PetalburgCity')
     for y,row in enumerate(grid):
         for x,code in enumerate(row):
             if code in ('P','E','B'):
@@ -72,8 +72,10 @@ def semantic_map(grid):
             elif code=='W':
                 result.fill(x,y,1,1,0x0A1,True,1)
             elif code=='R':
-                # Existing tan earth is the temporary red-clay vocabulary.
-                result.fill(x,y,1,1,0x121,True)
+                # A path-colored blocked tile was unreadable in playtesting.
+                # Use a visibly solid shrub/rock placeholder until red-clay
+                # scenery receives its final authored edge vocabulary.
+                result.fill(x,y,1,1,0x016,True)
             elif code=='L':
                 # Keep the authored shortcut lanes traversable until their final
                 # one-way ledge metatiles are selected in Porymap.
@@ -82,7 +84,16 @@ def semantic_map(grid):
                 # The old mine is a landmark, not a Chapter 1 entrance.
                 result.fill(x,y,1,1,0x016,True)
             elif code=='X':
-                result.tiles[y*w+x] |= 0x400
+                # Only draw a tree quadrant when its complete 2x2 tree exists.
+                # Irregular semantic edges use self-contained dense shrubs so
+                # no half/chopped trees imply a walkable opening.
+                ax,ay=x-x%2,y-y%2
+                complete=(ay+1<h and ax+1<w and
+                          all(grid[yy][xx]=='X' for yy in range(ay,ay+2) for xx in range(ax,ax+2)))
+                if complete:
+                    result.tiles[y*w+x]=tree_src[(y%2)*tree_w+x%2]
+                else:
+                    result.fill(x,y,1,1,0x016,True)
             else:
                 raise ValueError((x,y,code))
     return result
@@ -91,7 +102,7 @@ v.water(3,3,9,8)
 v.path(0,15,40,3);v.path(31,8,3,17)
 # Keep the central path clear of the lower service buildings, then route
 # the south exit along the east side of the civic block.
-v.path(15,18,3,9);v.path(26,18,3,14);v.path(22,18,3,9)
+v.path(15,18,3,9);v.path(27,18,5,14);v.path(22,18,3,9)
 v.house(30,4) # school door (32,7)
 v.house(15,2);v.house(22,2) # north residential feel
 v.stamp('PetalburgCity',24,10,4,4,15,21) # Mart door (16,23)
@@ -135,9 +146,16 @@ t=semantic_map(semantic_grid('route1_grid_v2.csv'))
 remove_layout('STEEL_ROUTE1_STUB')
 write_layout('Steel_Route1','STEEL_ROUTE1',t.w,t.h,t.tiles)
 # Independent interior layouts, preserving Emerald's useful furnishings.
-for name,ident,source in [('Steel_AluminaSchool','STEEL_ALUMINA_SCHOOL','RustboroCity_PokemonSchool'),('Steel_FamilyHome','STEEL_FAMILY_HOME','LittlerootTown_BrendansHouse_1F')]:
+for name,ident,source in [('Steel_AluminaSchool','STEEL_ALUMINA_SCHOOL','RustboroCity_PokemonSchool'),
+                          ('Steel_LeagueRegistration','STEEL_LEAGUE_REGISTRATION','RustboroCity_DevonCorp_1F')]:
  l=LAYOUTS[source+'_Layout'];sw,src=blocks(source)
  write_layout(name,ident,sw,l['height'],src,source)
+# The starter trio belongs on one unmistakable downstairs display. The house
+# tileset's book-table metatile reads as furniture beneath each object ball.
+l=LAYOUTS['LittlerootTown_BrendansHouse_1F_Layout'];sw,src=blocks('LittlerootTown_BrendansHouse_1F')
+home=list(src)
+for x in range(7,10):home[3*sw+x]=0x3293
+write_layout('Steel_FamilyHome','STEEL_FAMILY_HOME',sw,l['height'],home,'LittlerootTown_BrendansHouse_1F')
 # Keep the downstairs actor positions and warp coordinates stable, but give the
 # second floor three compact bedrooms with existing bedroom wall blocks.
 l=LAYOUTS['LittlerootTown_BrendansHouse_2F_Layout'];sw,src=blocks('LittlerootTown_BrendansHouse_2F')

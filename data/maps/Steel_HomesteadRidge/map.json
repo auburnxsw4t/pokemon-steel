@@ -61,6 +61,10 @@
   ],
   "coord_events": [
     {
+      "type": "trigger", "x": 6, "y": 26, "elevation": 3,
+      "var": "VAR_TEMP_0", "var_value": "0", "script": "Steel_Ridge_ToSouthWoods"
+    },
+    {
       "type": "trigger",
       "x": 7,
       "y": 26,
@@ -68,6 +72,10 @@
       "var": "VAR_TEMP_0",
       "var_value": "0",
       "script": "Steel_Ridge_ToSouthWoods"
+    },
+    {
+      "type": "trigger", "x": 8, "y": 26, "elevation": 3,
+      "var": "VAR_TEMP_0", "var_value": "0", "script": "Steel_Ridge_ToSouthWoods"
     }
   ],
   "bg_events": [
