@@ -9327,8 +9327,8 @@
     {
       "id": "LAYOUT_STEEL_ALUMINA_VILLAGE",
       "name": "Steel_AluminaVillage_Layout",
-      "width": 40,
-      "height": 32,
+      "width": 48,
+      "height": 36,
       "primary_tileset": "gTileset_General",
       "secondary_tileset": "gTileset_Petalburg",
       "border_filepath": "data/layouts/Steel_AluminaVillage/border.bin",
@@ -9415,8 +9415,8 @@
     {
       "id": "LAYOUT_STEEL_FAMILY_HOME",
       "name": "Steel_FamilyHome_Layout",
-      "width": 11,
-      "height": 9,
+      "width": 16,
+      "height": 12,
       "primary_tileset": "gTileset_Building",
       "secondary_tileset": "gTileset_BrendansMaysHouse",
       "border_filepath": "data/layouts/Steel_FamilyHome/border.bin",
@@ -9426,8 +9426,8 @@
     {
       "id": "LAYOUT_STEEL_FAMILY_HOME_2F",
       "name": "Steel_FamilyHome_2F_Layout",
-      "width": 9,
-      "height": 8,
+      "width": 18,
+      "height": 12,
       "primary_tileset": "gTileset_Building",
       "secondary_tileset": "gTileset_BrendansMaysHouse",
       "border_filepath": "data/layouts/Steel_FamilyHome_2F/border.bin",

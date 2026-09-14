@@ -36,7 +36,8 @@ def check_maps():
     by_id = {m['id']:m for m in maps.values()}
     layouts = {l['id']:l for l in json.loads((ROOT/'data/layouts/layouts.json').read_text())['layouts']}
     expected_maps = {'Steel_AluminaVillage', 'Steel_HomesteadRidge', 'Steel_CatchingWoods',
-                     'Steel_SouthWoods', 'Steel_SouthTrail', 'Steel_Route1', 'Steel_FamilyHome_2F'}
+                     'Steel_SouthWoods', 'Steel_SouthTrail', 'Steel_Route1', 'Steel_FamilyHome_2F',
+                     'Steel_LeagueRegistration', 'Steel_AluminaPokemonCenter_1F', 'Steel_AluminaMart'}
     assert expected_maps <= maps.keys(), expected_maps - maps.keys()
     for name,m in maps.items():
         layout=layouts[m['layout']]
@@ -61,12 +62,27 @@ def check_maps():
     assert maps['Steel_SouthTrail']['connections'] is None
     assert maps['Steel_Route1']['connections'] is None
     assert not any(c['map'] == 'MAP_STEEL_ROUTE1' for c in maps['Steel_AluminaVillage']['connections'])
+    expected_sections = {
+        'Steel_AluminaSchool': 'MAPSEC_ALUMINA_VILLAGE',
+        'Steel_AluminaVillage': 'MAPSEC_ALUMINA_VILLAGE',
+        'Steel_LeagueRegistration': 'MAPSEC_ALUMINA_VILLAGE',
+        'Steel_AluminaPokemonCenter_1F': 'MAPSEC_ALUMINA_VILLAGE',
+        'Steel_AluminaMart': 'MAPSEC_ALUMINA_VILLAGE',
+        'Steel_HomesteadRidge': 'MAPSEC_HOMESTEAD_RIDGE',
+        'Steel_FamilyHome': 'MAPSEC_HOMESTEAD_RIDGE',
+        'Steel_FamilyHome_2F': 'MAPSEC_HOMESTEAD_RIDGE',
+        'Steel_CatchingWoods': 'MAPSEC_LONGLEAF_HOLLOW',
+        'Steel_SouthWoods': 'MAPSEC_LONGLEAF_HOLLOW',
+        'Steel_SouthTrail': 'MAPSEC_SOUTH_TRAIL',
+        'Steel_Route1': 'MAPSEC_STEEL_ROUTE_1',
+    }
+    assert {name: maps[name]['region_map_section'] for name in expected_sections} == expected_sections
     village_triggers = {e['script'] for e in maps['Steel_AluminaVillage']['coord_events']}
     ridge_triggers = {e['script'] for e in maps['Steel_HomesteadRidge']['coord_events']}
     assert 'Steel_Village_ToSouthWoods' in village_triggers
     assert 'Steel_Ridge_ToSouthWoods' in ridge_triggers
     assert {e['x'] for e in maps['Steel_AluminaVillage']['coord_events']
-            if e['script'] == 'Steel_Village_ToSouthWoods'} == {27, 28, 29, 30, 31}
+            if e['script'] == 'Steel_Village_ToSouthWoods'} == {22, 23, 24, 25, 26}
     assert {e['x'] for e in maps['Steel_SouthWoods']['coord_events']
             if e['script'] == 'Steel_SouthWoods_ToAlumina'} == {27, 28, 29, 30, 31}
     woods = maps['Steel_CatchingWoods']
@@ -88,9 +104,15 @@ def check_maps():
     assert len([o for o in maps['Steel_SouthWoods']['object_events'] if o['trainer_type'] == 'TRAINER_TYPE_NORMAL']) == 3
     assert len([o for o in maps['Steel_Route1']['object_events'] if o['trainer_type'] == 'TRAINER_TYPE_NORMAL']) == 5
     assert maps['Steel_FamilyHome_2F']['layout'] == 'LAYOUT_STEEL_FAMILY_HOME_2F'
-    registration_kyle = next(o for o in maps['Steel_AluminaVillage']['object_events']
-                             if o.get('local_id') == 'LOCALID_STEEL_VILLAGE_KYLE_REGISTRATION')
-    assert (registration_kyle['x'], registration_kyle['y']) == (33, 27)
+    village_layout = layouts[maps['Steel_AluminaVillage']['layout']]
+    assert (village_layout['width'], village_layout['height']) == (48, 36)
+    assert (layouts[maps['Steel_FamilyHome']['layout']]['width'],
+            layouts[maps['Steel_FamilyHome']['layout']]['height']) == (16, 12)
+    assert (layouts[maps['Steel_FamilyHome_2F']['layout']]['width'],
+            layouts[maps['Steel_FamilyHome_2F']['layout']]['height']) == (18, 12)
+    registration_kyle = next(o for o in maps['Steel_LeagueRegistration']['object_events']
+                             if o.get('local_id') == 'LOCALID_STEEL_REGISTRATION_KYLE')
+    assert (registration_kyle['x'], registration_kyle['y']) == (8, 4)
     assert registration_kyle['flag'] == 'FLAG_HIDE_STEEL_KYLE_REGISTRATION'
     print('PASS: map sizes, revised topology, tall grass, required trainers, NPC collision tiles, Kyle flags, and warps')
 

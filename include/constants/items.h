@@ -1052,6 +1052,9 @@ enum __attribute__((packed)) Item
     ITEM_TATSUGIRINITE = 872,
     ITEM_GLIMMORANITE = 873,
 
+    // Pokémon Steel key items
+    ITEM_FERRANE_TRAINER_LICENSE = 874,
+
     ITEMS_COUNT,
     ITEM_FIELD_ARROW = ITEMS_COUNT,
 };

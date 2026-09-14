@@ -114,6 +114,8 @@ Steel_Home_ChoosePosskit::
 	removeobject LOCALID_STEEL_HOME_POSSKIT_BALL
 	msgbox Steel_Home_Text_ReceivedPosskit, MSGBOX_DEFAULT
 	closemessage
+	applymovement OBJ_EVENT_ID_PLAYER, Steel_Home_PlayerFromLeftBall
+	waitmovement OBJ_EVENT_ID_PLAYER
 	applymovement LOCALID_STEEL_HOME_KYLE, Steel_Home_KyleTakesRightBall
 	waitmovement LOCALID_STEEL_HOME_KYLE
 	removeobject LOCALID_STEEL_HOME_MIMBRI_BALL
@@ -127,6 +129,8 @@ Steel_Home_ChoosePosskit::
 	closemessage
 	applymovement LOCALID_STEEL_HOME_LOGAN, Steel_Home_LoganReturnsFromMiddleBall
 	waitmovement LOCALID_STEEL_HOME_LOGAN
+	applymovement LOCALID_STEEL_HOME_KYLE, Steel_Home_KyleStagesFromRight
+	waitmovement LOCALID_STEEL_HOME_KYLE
 	goto Steel_Home_StartKyleBattle
 	end
 
@@ -142,6 +146,8 @@ Steel_Home_ChooseSheldo::
 	removeobject LOCALID_STEEL_HOME_SHELDO_BALL
 	msgbox Steel_Home_Text_ReceivedSheldo, MSGBOX_DEFAULT
 	closemessage
+	applymovement OBJ_EVENT_ID_PLAYER, Steel_Home_PlayerFromMiddleBall
+	waitmovement OBJ_EVENT_ID_PLAYER
 	applymovement LOCALID_STEEL_HOME_KYLE, Steel_Home_KyleTakesLeftBall
 	waitmovement LOCALID_STEEL_HOME_KYLE
 	removeobject LOCALID_STEEL_HOME_POSSKIT_BALL
@@ -155,6 +161,8 @@ Steel_Home_ChooseSheldo::
 	closemessage
 	applymovement LOCALID_STEEL_HOME_LOGAN, Steel_Home_LoganReturnsFromRightBall
 	waitmovement LOCALID_STEEL_HOME_LOGAN
+	applymovement LOCALID_STEEL_HOME_KYLE, Steel_Home_KyleStagesFromLeft
+	waitmovement LOCALID_STEEL_HOME_KYLE
 	goto Steel_Home_StartKyleBattle
 	end
 
@@ -170,6 +178,8 @@ Steel_Home_ChooseMimbri::
 	removeobject LOCALID_STEEL_HOME_MIMBRI_BALL
 	msgbox Steel_Home_Text_ReceivedMimbri, MSGBOX_DEFAULT
 	closemessage
+	applymovement OBJ_EVENT_ID_PLAYER, Steel_Home_PlayerFromRightBall
+	waitmovement OBJ_EVENT_ID_PLAYER
 	applymovement LOCALID_STEEL_HOME_KYLE, Steel_Home_KyleTakesMiddleBall
 	waitmovement LOCALID_STEEL_HOME_KYLE
 	removeobject LOCALID_STEEL_HOME_SHELDO_BALL
@@ -183,6 +193,8 @@ Steel_Home_ChooseMimbri::
 	closemessage
 	applymovement LOCALID_STEEL_HOME_LOGAN, Steel_Home_LoganReturnsFromLeftBall
 	waitmovement LOCALID_STEEL_HOME_LOGAN
+	applymovement LOCALID_STEEL_HOME_KYLE, Steel_Home_KyleStagesFromMiddle
+	waitmovement LOCALID_STEEL_HOME_KYLE
 	goto Steel_Home_StartKyleBattle
 	end
 
@@ -276,73 +288,99 @@ Steel_Home_KyleFinishesExit::
 Steel_Home_KyleTakesLeftBall:
 	walk_up
 	walk_up
+	walk_left
+	walk_left
+	walk_left
+	walk_left
+	walk_left
 	face_up
 	step_end
 
 Steel_Home_KyleTakesMiddleBall:
-	walk_right
 	walk_up
 	walk_up
+	walk_left
+	walk_left
+	walk_left
+	walk_left
 	face_up
 	step_end
 
 Steel_Home_KyleTakesRightBall:
-	walk_right
-	walk_right
 	walk_up
 	walk_up
+	walk_left
+	walk_left
+	walk_left
 	face_up
 	step_end
 
 Steel_Home_LoganTakesLeftBall:
-	walk_right
-	walk_right
-	walk_up
-	walk_up
-	face_up
+	walk_left
+	face_down
 	step_end
 
 Steel_Home_LoganTakesMiddleBall:
-	walk_right
-	walk_right
-	walk_right
-	walk_up
-	walk_up
-	face_up
+	face_down
 	step_end
 
 Steel_Home_LoganTakesRightBall:
 	walk_right
-	walk_right
-	walk_right
-	walk_right
-	walk_up
-	walk_up
-	face_up
+	face_down
 	step_end
 
 Steel_Home_LoganReturnsFromLeftBall:
-	walk_down
-	walk_left
-	walk_left
-	walk_down
+	walk_right
+	face_down
 	step_end
 
 Steel_Home_LoganReturnsFromMiddleBall:
-	walk_down
-	walk_left
-	walk_left
-	walk_left
-	walk_down
+	face_down
 	step_end
 
 Steel_Home_LoganReturnsFromRightBall:
+	walk_left
+	face_down
+	step_end
+
+Steel_Home_PlayerFromLeftBall:
+	walk_down
+	walk_down
+	walk_down
+	walk_right
+	face_up
+	step_end
+
+Steel_Home_PlayerFromMiddleBall:
+	walk_down
+	walk_down
+	walk_down
+	face_up
+	step_end
+
+Steel_Home_PlayerFromRightBall:
+	walk_down
+	walk_down
 	walk_down
 	walk_left
-	walk_left
-	walk_left
-	walk_left
+	face_up
+	step_end
+
+Steel_Home_KyleStagesFromLeft:
 	walk_down
+	walk_right
+	face_down
+	step_end
+
+Steel_Home_KyleStagesFromMiddle:
+	walk_down
+	face_down
+	step_end
+
+Steel_Home_KyleStagesFromRight:
+	walk_down
+	walk_left
+	face_down
 	step_end
 
 Steel_Home_MadisonApproachPosskit:
@@ -394,44 +432,33 @@ Steel_Home_MadisonApproachPosskitMovement:
 	walk_up
 	walk_right
 	walk_right
+	walk_right
+	walk_right
 	walk_down
-	walk_right
-	walk_right
-	walk_right
-	walk_up
-	face_up
+	face_right
 	step_end
 
 Steel_Home_MadisonApproachSheldoMovement:
 	walk_up
 	walk_right
 	walk_right
+	walk_right
+	walk_right
 	walk_down
-	walk_right
-	walk_right
-	walk_right
-	walk_right
-	walk_up
-	face_up
+	face_right
 	step_end
 
 Steel_Home_MadisonApproachMimbriMovement:
 	walk_up
 	walk_right
 	walk_right
+	walk_right
+	walk_right
 	walk_down
-	walk_right
-	walk_right
-	walk_right
-	walk_right
-	walk_right
-	walk_up
-	face_up
+	face_right
 	step_end
 
 Steel_Home_MadisonReturnPosskitMovement:
-	walk_down
-	walk_left
 	walk_left
 	walk_left
 	walk_up
@@ -441,9 +468,6 @@ Steel_Home_MadisonReturnPosskitMovement:
 	step_end
 
 Steel_Home_MadisonReturnSheldoMovement:
-	walk_down
-	walk_left
-	walk_left
 	walk_left
 	walk_left
 	walk_up
@@ -453,10 +477,6 @@ Steel_Home_MadisonReturnSheldoMovement:
 	step_end
 
 Steel_Home_MadisonReturnMimbriMovement:
-	walk_down
-	walk_left
-	walk_left
-	walk_left
 	walk_left
 	walk_left
 	walk_up
@@ -469,6 +489,8 @@ Steel_Home_KyleExitFromLeftMovement:
 	walk_down
 	walk_down
 	walk_down
+	walk_down
+	walk_down
 	walk_right
 	walk_down
 	step_end
@@ -478,12 +500,18 @@ Steel_Home_KyleExitFromMiddleMovement:
 	walk_down
 	walk_down
 	walk_down
+	walk_down
+	walk_right
+	walk_down
 	step_end
 
 Steel_Home_KyleExitFromRightMovement:
 	walk_down
 	walk_down
 	walk_down
+	walk_down
+	walk_down
+	walk_right
 	walk_down
 	step_end
 
@@ -621,15 +649,7 @@ Steel_Home_Leave::
 	lockall
 	setvar VAR_STEEL_OPENING, STEEL_OPENING_LEAVING_HOME
 	closemessage
-	applymovement LOCALID_STEEL_HOME_LOGAN, Steel_Home_LoganExit
-	waitmovement LOCALID_STEEL_HOME_LOGAN
-	applymovement LOCALID_STEEL_HOME_KYLE, Common_Movement_WalkDown
-	waitmovement LOCALID_STEEL_HOME_KYLE
-	applymovement LOCALID_STEEL_HOME_LOGAN, Steel_Home_Exit0
-	applymovement LOCALID_STEEL_HOME_KYLE, Steel_Home_Exit1
-	applymovement OBJ_EVENT_ID_PLAYER, Steel_Home_Exit2
-	waitmovement LOCALID_STEEL_HOME_LOGAN
-	waitmovement LOCALID_STEEL_HOME_KYLE
+	applymovement OBJ_EVENT_ID_PLAYER, Common_Movement_WalkDown
 	waitmovement OBJ_EVENT_ID_PLAYER
 	removeobject LOCALID_STEEL_HOME_LOGAN
 	removeobject LOCALID_STEEL_HOME_KYLE
@@ -639,26 +659,6 @@ Steel_Home_Leave::
 	waitstate
 	releaseall
 	end
-
-Steel_Home_LoganExit:
-	walk_right
-	walk_down
-	walk_right
-	walk_right
-	step_end
-
-Steel_Home_Exit0:
-	walk_down
-	step_end
-
-Steel_Home_Exit1:
-	delay_16
-	walk_right
-	step_end
-
-Steel_Home_Exit2:
-	walk_down
-	step_end
 
 Steel_Home_Return::
 	lockall

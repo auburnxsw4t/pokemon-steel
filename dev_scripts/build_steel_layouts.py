@@ -50,8 +50,8 @@ class Map:
                 by=0 if yy==0 else 2 if yy==h-1 else 1
                 bx=0 if xx==0 else 2 if xx==w-1 else 1
                 self.fill(x+xx,y+yy,1,1,mids[by][bx],True,1)
-def semantic_grid(filename):
-    archive=ROOT/'docs/pokemon_steel/reference/chapter1/Pokemon_Steel_Chapter1_Map_Construction_V2.zip'
+def semantic_grid(filename, archive_name='Pokemon_Steel_Chapter1_Map_Construction_V2.zip'):
+    archive=ROOT/'docs/pokemon_steel/reference/chapter1'/archive_name
     with zipfile.ZipFile(archive) as z:
         rows=list(csv.reader(io.TextIOWrapper(z.open(filename),encoding='utf-8-sig')))
     grid=[row[1:] for row in rows[1:]]
@@ -97,21 +97,46 @@ def semantic_map(grid):
             else:
                 raise ValueError((x,y,code))
     return result
-v=Map(40,32);v.border()
-v.water(3,3,9,8)
-v.path(0,15,40,3);v.path(31,8,3,17)
-# Keep the central path clear of the lower service buildings, then route
-# the south exit along the east side of the civic block.
-v.path(15,18,3,9);v.path(27,18,5,14);v.path(22,18,3,9)
-v.house(30,4) # school door (32,7)
-v.house(15,2);v.house(22,2) # north residential feel
-v.stamp('PetalburgCity',24,10,4,4,15,21) # Mart door (16,23)
-v.stamp('PetalburgCity',19,14,4,4,22,21) # Center door (23,23)
-v.stamp('PetalburgCity',12,4,6,6,30,21) # Registration door (33,25)
-v.stamp('PetalburgCity',12,4,6,6,6,21) # chapel placeholder door (9,25)
-v.path(14,6,12,1);v.path(14,13,12,1);v.path(14,7,1,6);v.path(25,7,1,6)
-v.water(18,8,5,5);v.fill(20,10,1,1,0x002,True) # stone fountain basin, existing rock/water
-for x,y in [(15,8),(15,11),(24,8),(24,11),(28,5),(28,7)]:v.fill(x,y,1,1,4)
+# Syl's approved Alumina V2 semantic plan is authoritative for the village.
+# Translate its zones into coherent Emerald metatiles, then stamp recognizable
+# buildings at the exact approved door cells.  The east Route 1 reservation is
+# deliberately scenery-only: Chapter 1 progression goes south through Longleaf.
+ag=semantic_grid('alumina_village_tile_grid_v2.csv',
+                 'Pokemon_Steel_Alumina_Village_Construction_V2.zip')
+v=Map(len(ag[0]),len(ag)); tree_w,tree_src=blocks('PetalburgCity')
+for y,row in enumerate(ag):
+    for x,code in enumerate(row):
+        if code in ('P','D','B','L'): v.path(x,y,1,1)
+        elif code in ('G','C'): v.fill(x,y,1,1,0x001)
+        elif code=='W': v.fill(x,y,1,1,0x0A1,True,1)
+        elif code in ('F','V'): v.fill(x,y,1,1,0x016,True)
+        elif code in ('H','R'): v.fill(x,y,1,1,0x001)
+        elif code=='T': v.fill(x,y,1,1,0x002,True)
+        elif code=='X':
+            ax,ay=x-x%2,y-y%2
+            complete=(ay+1<len(ag) and ax+1<len(row) and
+                      all(ag[yy][xx]=='X' for yy in range(ay,ay+2) for xx in range(ax,ax+2)))
+            if complete: v.tiles[y*v.w+x]=tree_src[(y%2)*tree_w+x%2]
+            else: v.fill(x,y,1,1,0x016,True)
+        else: raise ValueError((x,y,code))
+# lake shore, homes, school, chapel and public services
+v.water(2,2,13,11)
+v.house(10,7)                 # resident A, door (12,10)
+v.house(31,7)                 # resident B, door (33,10)
+v.house(38,9)                 # school, door (40,12)
+v.stamp('PetalburgCity',12,4,6,6,4,16)   # chapel, door (7,20)
+v.stamp('PetalburgCity',24,10,4,4,16,28) # Mart, door (17,30)
+v.stamp('PetalburgCity',19,14,4,4,27,28) # Center, door (28,30)
+v.stamp('PetalburgCity',12,4,6,6,36,25)  # Registration, door (39,29)
+# The semantic west road meets the chapel footprint. Route the public path
+# visibly around its south wall so Homestead remains directly connected.
+v.path(2,18,2,6);v.path(2,22,11,2);v.path(11,18,2,6)
+# Registration's south-facing door needs a legible public approach through the
+# landscaping band.
+v.path(35,31,5,1)
+# A compact civic marker anchors the plaza while the approved east-west spine
+# remains fully open through rows 18-20.
+v.fill(25,17,1,1,0x002,True)
 write_layout('Steel_AluminaVillage','STEEL_ALUMINA_VILLAGE',v.w,v.h,v.tiles)
 r=Map(36,28);r.border();r.water(2,2,32,5)
 r.path(0,15,36,3);r.path(7,12,3,12);r.path(24,12,3,16)
@@ -123,6 +148,9 @@ for yy in [9,11]:
 # The south-west path is the Homestead trailhead into Southwoods V2. Keep the
 # eastern garden path internal so it cannot conflict with that connection.
 r.path(5,12,5,16)
+# Bend the approved east Alumina road down three cells so it meets Syl's V2
+# west gate directly without relying on a fragile offset connection.
+r.path(30,15,6,6)
 r.trees(24,24,3,4)
 write_layout('Steel_HomesteadRidge','STEEL_HOMESTEAD_RIDGE',r.w,r.h,r.tiles)
 w=Map(28,24);w.border();w.water(2,2,24,5)
@@ -150,19 +178,34 @@ for name,ident,source in [('Steel_AluminaSchool','STEEL_ALUMINA_SCHOOL','Rustbor
                           ('Steel_LeagueRegistration','STEEL_LEAGUE_REGISTRATION','RustboroCity_DevonCorp_1F')]:
  l=LAYOUTS[source+'_Layout'];sw,src=blocks(source)
  write_layout(name,ident,sw,l['height'],src,source)
-# The starter trio belongs on one unmistakable downstairs display. The house
-# tileset's book-table metatile reads as furniture beneath each object ball.
-l=LAYOUTS['LittlerootTown_BrendansHouse_1F_Layout'];sw,src=blocks('LittlerootTown_BrendansHouse_1F')
-home=list(src)
-for x in range(7,10):home[3*sw+x]=0x3293
-write_layout('Steel_FamilyHome','STEEL_FAMILY_HOME',sw,l['height'],home,'LittlerootTown_BrendansHouse_1F')
-# Keep the downstairs actor positions and warp coordinates stable, but give the
-# second floor three compact bedrooms with existing bedroom wall blocks.
-l=LAYOUTS['LittlerootTown_BrendansHouse_2F_Layout'];sw,src=blocks('LittlerootTown_BrendansHouse_2F')
-up=list(src)
-for y in range(3,7):
-    up[y*sw+2]=0x204
-    up[y*sw+5]=0x204
-write_layout('Steel_FamilyHome_2F','STEEL_FAMILY_HOME_2F',sw,l['height'],up,'LittlerootTown_BrendansHouse_2F')
+# Revised 16x12 downstairs: west living/trophy area, northeast kitchen/trainer
+# area, north-center starter counter and a clear south-center foyer.
+home=Map(16,12);home.fill(0,0,16,12,0x201)
+home.fill(0,0,16,1,0x204,True);home.fill(0,11,16,1,0x204,True)
+home.fill(0,0,1,12,0x204,True);home.fill(15,0,1,12,0x204,True)
+# Existing Emerald furnishing stamps keep the expanded room visually grounded.
+home.stamp('LittlerootTown_BrendansHouse_1F',0,3,7,6,1,4)
+home.stamp('LittlerootTown_BrendansHouse_1F',5,3,6,6,9,4)
+# Indoor floor only: outdoor path metatiles are invalid in this tileset and
+# render as the bright-magenta corruption caught in playtesting.
+home.fill(6,4,4,7,0x201)
+for x in range(7,10): home.tiles[3*home.w+x]=0x3293
+# stair landing in the northeast; exterior door tiles remain open at (8,11)/(9,11)
+home.tiles[2*home.w+14]=0x3208
+home.tiles[11*home.w+8]=0x0202;home.tiles[11*home.w+9]=0x0203
+write_layout('Steel_FamilyHome','STEEL_FAMILY_HOME',home.w,home.h,home.tiles,'LittlerootTown_BrendansHouse_1F')
+# Revised 18x12 upstairs: player room west, parents north-center and Kyle east,
+# all opening onto a broad southern hall and stair landing.
+up=Map(18,12);up.fill(0,0,18,12,0x201)
+up.fill(0,0,18,1,0x204,True);up.fill(0,11,18,1,0x204,True)
+up.fill(0,0,1,12,0x204,True);up.fill(17,0,1,12,0x204,True)
+for x in (6,11):
+    up.fill(x,1,1,6,0x204,True)
+    up.fill(x,6,1,1,0x201)
+up.stamp('LittlerootTown_BrendansHouse_2F',0,2,4,5,1,1)
+up.stamp('LittlerootTown_BrendansHouse_2F',4,2,4,5,7,1)
+up.stamp('LittlerootTown_BrendansHouse_2F',4,2,4,5,12,1)
+up.tiles[10*up.w+9]=0x3208
+write_layout('Steel_FamilyHome_2F','STEEL_FAMILY_HOME_2F',up.w,up.h,up.tiles,'LittlerootTown_BrendansHouse_2F')
 PATH.write_text(json.dumps(DATA,indent=2)+'\n')
 print('Authored independent Steel layouts and structural stubs.')

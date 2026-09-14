@@ -148,7 +148,7 @@ static void LoganHandleActions(enum BattlerId battler)
     switch (gBattleStruct->wallyBattleState)
     {
     case 0:
-        LoganMessage(COMPOUND_STRING("LOGAN: Watch its health."));
+        LoganMessage(COMPOUND_STRING("LOGAN: Watch its HP."));
         gBattleStruct->wallyBattleState = 1;
         break;
     case 1:
@@ -162,20 +162,20 @@ static void LoganHandleActions(enum BattlerId battler)
         break;
     case 2:
         gSteelTutorialSwipeHp = gBattleMons[GetBattlerAtPosition(B_POSITION_OPPONENT_LEFT)].hp;
-        LoganMessage(COMPOUND_STRING("LOGAN: FALSE SWIPE can't\nknock a POKéMON out."));
+        LoganMessage(COMPOUND_STRING("FALSE SWIPE leaves a target\nwith at least 1 HP."));
         gBattleStruct->wallyBattleState = 3;
         break;
     case 3:
         if (LoganMessageFinished())
         {
-            LoganMessage(COMPOUND_STRING("Low HP makes a POKéMON\neasier to catch."));
+            LoganMessage(COMPOUND_STRING("Low HP makes it easier\nto catch."));
             gBattleStruct->wallyBattleState = 4;
         }
         break;
     case 4:
         if (LoganMessageFinished())
         {
-            LoganMessage(COMPOUND_STRING("Sleep or paralysis helps, too.\nNow, a POKé BALL!"));
+            LoganMessage(COMPOUND_STRING("Sleep and paralysis help.\nNow, a POKé BALL!"));
             gBattleStruct->wallyBattleState = 5;
         }
         break;

@@ -53,7 +53,7 @@ void SteelSyncOpeningActors(void)
         FlagClear(FLAG_HIDE_STEEL_KYLE_VILLAGE);
         break;
     case STEEL_OPENING_COMPLETE:
-        if (registration != STEEL_REGISTRATION_COMPLETE)
+        if (registration == STEEL_REGISTRATION_ACTIVE)
             FlagClear(FLAG_HIDE_STEEL_KYLE_REGISTRATION);
         break;
     case STEEL_OPENING_RIDGE_HOME:

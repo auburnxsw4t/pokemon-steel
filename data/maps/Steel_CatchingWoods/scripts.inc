@@ -70,7 +70,7 @@ Steel_Woods_Text_Kyle:
 	.string "full health.$"
 Steel_Woods_Text_LoganReply:
 	.string "LOGAN: When you're buying the\n"
-	.string "POKé BALLS, you're welcome to try.$"
+	.string "POKé BALLS, you can try.$"
 Steel_Woods_Text_Retry:
 	.string "LOGAN: Let's try that again.\n"
 	.string "Talk to me when you're ready.$"

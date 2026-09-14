@@ -23,6 +23,7 @@ __builtin_offsetof(struct SaveBlock1,flags),
 __builtin_offsetof(struct SaveBlock1,playerPartyCount),
 __builtin_offsetof(struct SaveBlock1,playerParty),
 __builtin_offsetof(struct SaveBlock1,bag.items),
+__builtin_offsetof(struct SaveBlock1,bag.keyItems),
 __builtin_offsetof(struct SaveBlock2,encryptionKey),
 __builtin_offsetof(struct Pokemon,box.secure),
 __builtin_offsetof(struct Pokemon,hp),
@@ -34,17 +35,17 @@ __builtin_offsetof(struct BattlePokemon,maxHP),
 sizeof(struct BattlePokemon), sizeof(struct ItemSlot),
 __builtin_offsetof(struct ItemSlot,itemId),
 __builtin_offsetof(struct ItemSlot,quantity),
-BAG_ITEMS_COUNT, SPECIES_ZIGZAGOON, SPECIES_SANDSHREW,
+BAG_ITEMS_COUNT, BAG_KEYITEMS_COUNT, SPECIES_ZIGZAGOON, SPECIES_SANDSHREW,
 SPECIES_TAILLOW, ITEM_SILK_SCARF};
 ''')
             subprocess.run(['arm-none-eabi-gcc','-mabi=apcs-gnu','-mthumb','-mcpu=arm7tdmi','-std=gnu17','-DMODERN=1','-DEMERALD=1','-iquote',str(ROOT/'include'),'-S',str(c),'-o',str(asm)],check=True)
             values=list(map(int,re.findall(r'\.word\s+(\d+)',asm.read_text())))
             (self.vars_offset,self.flags_offset,self.party_count_offset,self.party_offset,
-             self.bag_items_offset,self.encryption_key_offset,self.mon_secure_offset,
+             self.bag_items_offset,self.bag_key_items_offset,self.encryption_key_offset,self.mon_secure_offset,
              self.mon_hp_offset,self.mon_max_hp_offset,self.mon_size,self.substruct_size,
              self.battle_species_offset,self.battle_hp_offset,self.battle_max_hp_offset,
              self.battle_mon_size,self.item_slot_size,self.item_id_offset,
-             self.item_quantity_offset,self.bag_items_count,self.species_zigzagoon,
+             self.item_quantity_offset,self.bag_items_count,self.bag_key_items_count,self.species_zigzagoon,
              self.species_sandshrew,self.species_taillow,self.item_silk_scarf)=values
         self.frames=0
         self.history=[]
@@ -82,13 +83,15 @@ SPECIES_TAILLOW, ITEM_SILK_SCARF};
     def party_species(self):return self.trainer_party_species(0)
     def item_quantity(self,item):
         key=int.from_bytes(self.read(self.u32(self.sym('gSaveBlock2Ptr'))+self.encryption_key_offset,2),'little')
-        raw=self.read(self.sb1()+self.bag_items_offset,self.item_slot_size*self.bag_items_count)
-        for i in range(self.bag_items_count):
-            base=i*self.item_slot_size
-            item_id=int.from_bytes(raw[base+self.item_id_offset:base+self.item_id_offset+2],'little')
-            if item_id==item:
-                quantity=int.from_bytes(raw[base+self.item_quantity_offset:base+self.item_quantity_offset+2],'little')
-                return quantity^key
+        for offset,count in ((self.bag_items_offset,self.bag_items_count),
+                             (self.bag_key_items_offset,self.bag_key_items_count)):
+            raw=self.read(self.sb1()+offset,self.item_slot_size*count)
+            for i in range(count):
+                base=i*self.item_slot_size
+                item_id=int.from_bytes(raw[base+self.item_id_offset:base+self.item_id_offset+2],'little')
+                if item_id==item:
+                    quantity=int.from_bytes(raw[base+self.item_quantity_offset:base+self.item_quantity_offset+2],'little')
+                    return quantity^key
         return 0
     def battle_species(self,battler):
         address=self.sym('gBattleMons')+battler*self.battle_mon_size+self.battle_species_offset
@@ -150,22 +153,22 @@ def main():
         e.walk(128,32);e.step(120)
         assert e.location()[1]==1,('home exit',e.location(),e.player())
         e.assert_kyle('HOME')
-        e.goto(8,16);e.goto(35,16);e.walk(16,40);e.step(90)
+        e.goto(8,16);e.goto(30,16);e.goto(30,19);e.goto(35,19);e.walk(16,40);e.step(90)
         assert e.location()[1]==4,('village entry',e.location(),e.player())
-        e.goto(32,16);e.goto(32,8);e.walk(64,24);e.step(120)
+        e.goto(3,22);e.goto(12,22);e.goto(12,19);e.goto(22,19);e.goto(22,20);e.goto(30,20);e.goto(30,19);e.goto(40,19);e.goto(40,13);e.walk(64,24);e.step(120)
         assert e.location()[1]==0,('school entry',e.location(),e.player())
         e.assert_kyle('HOME')
         e.walk(128,32);e.step(120)
         assert e.location()[1]==4
-        e.goto(32,16);e.goto(0,16);e.walk(32,32);e.step(80)
+        e.goto(40,19);e.goto(30,19);e.goto(30,20);e.goto(22,20);e.goto(22,19);e.goto(12,19);e.goto(12,22);e.goto(3,22);e.goto(3,19);e.goto(0,19);e.walk(32,32);e.step(80)
         assert e.location()[1]==1
-        e.goto(0,16);e.walk(32,32);e.step(80)
+        e.goto(30,19);e.goto(30,16);e.goto(0,16);e.walk(32,32);e.step(80)
         assert e.location()[1]==1,('ridge west edge remains bounded',e.location(),e.player())
-        e.goto(35,16);e.walk(16,32);e.step(80)
+        e.goto(30,16);e.goto(30,19);e.goto(35,19);e.walk(16,32);e.step(80)
         assert e.location()[1]==4,('village re-entry',e.location(),e.player())
-        e.goto(39,16);e.walk(16,32);e.step(80)
+        e.goto(3,22);e.goto(12,22);e.goto(12,19);e.goto(22,19);e.goto(22,20);e.goto(30,20);e.goto(30,19);e.goto(46,19);e.walk(16,32);e.step(80)
         assert e.location()[1]==4,('old direct Route 1 edge remains closed',e.location(),e.player())
-        e.goto(28,29);e.walk(128,16);e.step(100)
+        e.goto(30,19);e.goto(30,20);e.goto(24,20);e.goto(24,23);e.goto(23,23);e.goto(23,25);e.goto(24,25);e.goto(24,33);e.walk(128,16);e.step(100)
         assert e.location()[1]==6,('Alumina Southwoods trailhead',e.location(),e.player())
         e.walk(64,16);e.step(100)
         assert e.location()[1]==4,('Southwoods return to Alumina',e.location(),e.player())

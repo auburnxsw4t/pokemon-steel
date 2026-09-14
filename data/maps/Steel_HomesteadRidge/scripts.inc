@@ -33,7 +33,7 @@ Steel_Ridge_EscortHome::
 	waitmovement OBJ_EVENT_ID_PLAYER
 	setvar VAR_STEEL_OPENING, STEEL_OPENING_HOME
 	special SteelSyncOpeningActors
-	warp MAP_STEEL_FAMILY_HOME, 9, 7
+	warp MAP_STEEL_FAMILY_HOME, 9, 10
 	waitstate
 	releaseall
 	end
@@ -251,7 +251,7 @@ Steel_Ridge_Return::
 	closemessage
 	setvar VAR_STEEL_OPENING, STEEL_OPENING_HOME_RETURN
 	special SteelSyncOpeningActors
-	warp MAP_STEEL_FAMILY_HOME, 9, 7
+	warp MAP_STEEL_FAMILY_HOME, 9, 10
 	waitstate
 	releaseall
 	end

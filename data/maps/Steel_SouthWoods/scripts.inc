@@ -7,7 +7,7 @@ Steel_SouthWoods_ToHomestead::
 	end
 
 Steel_SouthWoods_ToAlumina::
-	warp MAP_STEEL_ALUMINA_VILLAGE, 28, 29
+	warp MAP_STEEL_ALUMINA_VILLAGE, 24, 33
 	waitstate
 	end
 

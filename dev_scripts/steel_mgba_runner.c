@@ -18,7 +18,7 @@ int main(int argc, char **argv)
     mCoreInitConfig(core, "steel-tests");
     mCoreConfigSetDefaultValue(&core->config, "idleOptimization", "remove");
     mCoreLoadConfig(core);
-    color_t *pixels = calloc(240 * 160, sizeof(color_t));
+    mColor *pixels = calloc(240 * 160, sizeof(mColor));
     core->setVideoBuffer(core, pixels, 240);
     if (!core->loadROM(core, VFileOpen(argv[1], O_RDONLY))) return 4;
     if (!core->loadSave(core, VFileMemChunk(NULL, 128 * 1024))) return 11;

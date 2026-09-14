@@ -1630,6 +1630,11 @@
       "y": 4,
       "width": 1,
       "height": 1
-    }
+    },
+    {"id": "MAPSEC_ALUMINA_VILLAGE", "name": "ALUMINA VILLAGE", "x": 4, "y": 10, "width": 1, "height": 1},
+    {"id": "MAPSEC_HOMESTEAD_RIDGE", "name": "HOMESTEAD RIDGE", "x": 3, "y": 10, "width": 1, "height": 1},
+    {"id": "MAPSEC_LONGLEAF_HOLLOW", "name": "LONGLEAF HOLLOW", "x": 4, "y": 11, "width": 1, "height": 1},
+    {"id": "MAPSEC_SOUTH_TRAIL", "name": "SOUTH TRAIL", "x": 4, "y": 12, "width": 1, "height": 1},
+    {"id": "MAPSEC_STEEL_ROUTE_1", "name": "ROUTE 1", "x": 4, "y": 13, "width": 1, "height": 1}
   ]
 }

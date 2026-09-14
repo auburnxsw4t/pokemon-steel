@@ -38,7 +38,7 @@ Steel_School_ConfirmName:
 	removeobject LOCALID_STEEL_SCHOOL_KYLE
 	setvar VAR_STEEL_OPENING, STEEL_OPENING_DISMISSED
 	special SteelSyncOpeningActors
-	warp MAP_STEEL_ALUMINA_VILLAGE, 32, 8
+	warp MAP_STEEL_ALUMINA_VILLAGE, 40, 13
 	waitstate
 	releaseall
 	end

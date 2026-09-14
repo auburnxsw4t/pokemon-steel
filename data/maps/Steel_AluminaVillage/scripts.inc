@@ -41,19 +41,6 @@ Steel_Village_KyleToGreen:
 	walk_down
 	walk_down
 	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
 	step_end
 
 Steel_Village_PlayerToGreen:
@@ -61,36 +48,10 @@ Steel_Village_PlayerToGreen:
 	walk_down
 	walk_down
 	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_down
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
 	step_end
 
 Steel_Village_KyleWest:
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
+	walk_down
 	walk_left
 	walk_left
 	walk_left
@@ -99,19 +60,7 @@ Steel_Village_KyleWest:
 	step_end
 
 Steel_Village_PlayerWest:
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
-	walk_left
+	walk_down
 	walk_left
 	walk_left
 	walk_left
@@ -166,6 +115,10 @@ Steel_Village_ChapelSign::
 	msgbox Steel_Village_Text_Chapel, MSGBOX_SIGN
 	end
 
+Steel_Village_EastRoadSign::
+	msgbox Steel_Village_Text_EastRoad, MSGBOX_SIGN
+	end
+
 Steel_Village_Text_League:
 	.string "KYLE: See that registration office?\n"
 	.string "The Ferrane League starts there!\p"
@@ -206,3 +159,8 @@ Steel_Village_Text_Closed:
 
 Steel_Village_Text_Chapel:
 	.string "ST. ARLEN'S CHAPEL\nA quiet place for the village.$"
+
+Steel_Village_Text_EastRoad:
+	.string "OLD ROUTE 1 ROAD\n"
+	.string "Closed. Use the south road\l"
+	.string "through LONGLEAF HOLLOW.$"

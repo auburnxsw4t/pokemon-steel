@@ -4,7 +4,7 @@
   "layout": "LAYOUT_STEEL_SOUTH_TRAIL",
   "music": "MUS_ROUTE101",
   "region": "REGION_HOENN",
-  "region_map_section": "MAPSEC_ROUTE_101",
+  "region_map_section": "MAPSEC_SOUTH_TRAIL",
   "requires_flash": false,
   "weather": "WEATHER_SUNNY",
   "map_type": "MAP_TYPE_ROUTE",

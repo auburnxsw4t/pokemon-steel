@@ -4,7 +4,15 @@
       "id": "HEAL_LOCATION_STEEL_FAMILY_HOME",
       "map": "MAP_STEEL_FAMILY_HOME",
       "x": 8,
-      "y": 7
+      "y": 10
+    },
+    {
+      "id": "HEAL_LOCATION_STEEL_ALUMINA_VILLAGE",
+      "map": "MAP_STEEL_ALUMINA_VILLAGE",
+      "x": 28,
+      "y": 31,
+      "respawn_map": "MAP_STEEL_ALUMINA_POKEMON_CENTER_1F",
+      "respawn_npc": "LOCALID_STEEL_ALUMINA_NURSE"
     },
     {
       "id": "HEAL_LOCATION_LITTLEROOT_TOWN_BRENDANS_HOUSE_2F",

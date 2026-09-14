@@ -16084,6 +16084,22 @@ const struct ItemInfo gItemsInfo[] =
         .iconPalette = gItemIconPalette_TwiceSpicedRadish,
     },
 
+    [ITEM_FERRANE_TRAINER_LICENSE] =
+    {
+        .name = ITEM_NAME("Trainer License"),
+        .price = 0,
+        .description = COMPOUND_STRING(
+            "Ferrane League ID\n"
+            "authorizing its owner\n"
+            "to challenge Gyms."),
+        .importance = 2,
+        .pocket = POCKET_KEY_ITEMS,
+        .type = ITEM_USE_BAG_MENU,
+        .fieldUseFunc = ItemUseOutOfBattle_CannotUse,
+        .iconPic = gItemIcon_ContestPass,
+        .iconPalette = gItemIconPalette_ContestPass,
+    },
+
     [ITEM_POKESHI_DOLL] =
     {
         .name = ITEM_NAME("Pokéshi Doll"),

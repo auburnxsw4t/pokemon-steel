@@ -96,7 +96,7 @@ def main():
         emulator.write(emulator.sym('sWildEncountersDisabled'), 1, 1)
 
         # Home -> Homestead, then both approved trailheads and their return warps.
-        emulator.goto(8, 7)
+        emulator.goto(8, 10)
         emulator.walk(128, 32)
         emulator.step(100)
         assert emulator.location()[1] == 1
@@ -108,11 +108,26 @@ def main():
         emulator.step(100)
         assert emulator.location()[1] == 1
         emulator.goto(7, 16)
-        emulator.goto(35, 16)
+        emulator.goto(30, 16)
+        emulator.goto(30, 19)
+        emulator.goto(35, 19)
         emulator.walk(16, 24)
         emulator.step(100)
         assert emulator.location()[1] == 4
-        emulator.goto(28, 29)
+        emulator.goto(3, 22)
+        emulator.goto(12, 22)
+        emulator.goto(12, 19)
+        emulator.goto(22, 19)
+        emulator.goto(22, 20)
+        emulator.goto(30, 20)
+        emulator.goto(30, 19)
+        emulator.goto(30, 20)
+        emulator.goto(24, 20)
+        emulator.goto(24, 23)
+        emulator.goto(23, 23)
+        emulator.goto(23, 25)
+        emulator.goto(24, 25)
+        emulator.goto(24, 33)
         emulator.walk(128, 16)
         emulator.step(100)
         assert emulator.location()[1] == 6 and emulator.player() == (29, 3)
@@ -162,7 +177,7 @@ def main():
             raise AssertionError('wild battle did not initialize')
         emulator.set_battle_hp(0, 0)
         emulator.write(emulator.sym('gParties') + emulator.mon_hp_offset, 0, 2)
-        emulator.advance(lambda: emulator.location()[1] == 2 and emulator.player() == (8, 7),
+        emulator.advance(lambda: emulator.location()[1] == 2 and emulator.player() == (8, 10),
                          limit=50000)
         emulator.step(240)
         assert emulator.stage() == 15, ('story state changed after whiteout', emulator.stage())
@@ -188,7 +203,7 @@ def main():
         emulator.tap(1)  # Continue
         emulator.advance(lambda: emulator.stage() == 15
                          and emulator.location() == (75, 2)
-                         and emulator.player() == (8, 7), limit=30000)
+                         and emulator.player() == (8, 10), limit=30000)
         assert emulator.party_hp() == emulator.party_max_hp() > 0
         print('PASS: both forest trailheads, South Trail, Route 1 wild battle, Steel-family-home whiteout, and cartridge save/reload')
     finally:
