@@ -129,6 +129,11 @@ Steel_Ridge_VillageSign::
 	msgbox Steel_Ridge_Text_Village, MSGBOX_SIGN
 	end
 
+Steel_Ridge_ToSouthWoods::
+	warp MAP_STEEL_SOUTH_WOODS, 6, 3
+	waitstate
+	end
+
 Steel_Ridge_Text_Home:
 	.string "KYLE: There's our house.\n"
 	.string "Come on. Let's see what Dad caught!$"

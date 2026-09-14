@@ -112,8 +112,11 @@ Steel_Home_ChoosePosskit::
 	setflag FLAG_HIDE_STEEL_STARTER_POSSKIT
 	setflag FLAG_HIDE_STEEL_STARTER_MIMBRI
 	removeobject LOCALID_STEEL_HOME_POSSKIT_BALL
-	removeobject LOCALID_STEEL_HOME_MIMBRI_BALL
 	msgbox Steel_Home_Text_ReceivedPosskit, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_STEEL_HOME_KYLE, Steel_Home_KyleTakesRightBall
+	waitmovement LOCALID_STEEL_HOME_KYLE
+	removeobject LOCALID_STEEL_HOME_MIMBRI_BALL
 	msgbox Steel_Home_Text_KyleTakesMimbri, MSGBOX_DEFAULT
 	goto Steel_Home_StartKyleBattle
 	end
@@ -128,8 +131,11 @@ Steel_Home_ChooseSheldo::
 	setflag FLAG_HIDE_STEEL_STARTER_SHELDO
 	setflag FLAG_HIDE_STEEL_STARTER_POSSKIT
 	removeobject LOCALID_STEEL_HOME_SHELDO_BALL
-	removeobject LOCALID_STEEL_HOME_POSSKIT_BALL
 	msgbox Steel_Home_Text_ReceivedSheldo, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_STEEL_HOME_KYLE, Steel_Home_KyleTakesLeftBall
+	waitmovement LOCALID_STEEL_HOME_KYLE
+	removeobject LOCALID_STEEL_HOME_POSSKIT_BALL
 	msgbox Steel_Home_Text_KyleTakesPosskit, MSGBOX_DEFAULT
 	goto Steel_Home_StartKyleBattle
 	end
@@ -144,8 +150,11 @@ Steel_Home_ChooseMimbri::
 	setflag FLAG_HIDE_STEEL_STARTER_MIMBRI
 	setflag FLAG_HIDE_STEEL_STARTER_SHELDO
 	removeobject LOCALID_STEEL_HOME_MIMBRI_BALL
-	removeobject LOCALID_STEEL_HOME_SHELDO_BALL
 	msgbox Steel_Home_Text_ReceivedMimbri, MSGBOX_DEFAULT
+	closemessage
+	applymovement LOCALID_STEEL_HOME_KYLE, Steel_Home_KyleTakesMiddleBall
+	waitmovement LOCALID_STEEL_HOME_KYLE
+	removeobject LOCALID_STEEL_HOME_SHELDO_BALL
 	msgbox Steel_Home_Text_KyleTakesSheldo, MSGBOX_DEFAULT
 	goto Steel_Home_StartKyleBattle
 	end
@@ -186,6 +195,9 @@ Steel_Home_AfterKyleBattle::
 
 Steel_Home_GiveSilkScarf::
 	goto_if_set FLAG_RECEIVED_STEEL_SILK_SCARF, Steel_Home_KyleDeparts
+	closemessage
+	applymovement LOCALID_STEEL_HOME_MADISON, Steel_Home_MadisonApproaches
+	waitmovement LOCALID_STEEL_HOME_MADISON
 	msgbox Steel_Home_Text_MadisonGift, MSGBOX_DEFAULT
 	giveitem ITEM_SILK_SCARF
 	goto_if_eq VAR_RESULT, FALSE, Steel_Home_NoRoomForScarf
@@ -208,6 +220,31 @@ Steel_Home_KyleDeparts::
 	special SteelSyncOpeningActors
 	releaseall
 	end
+
+Steel_Home_KyleTakesLeftBall:
+	walk_up
+	face_up
+	step_end
+
+Steel_Home_KyleTakesMiddleBall:
+	walk_right
+	walk_up
+	face_up
+	step_end
+
+Steel_Home_KyleTakesRightBall:
+	walk_right
+	walk_right
+	walk_up
+	face_up
+	step_end
+
+Steel_Home_MadisonApproaches:
+	walk_up
+	walk_right
+	walk_right
+	face_right
+	step_end
 
 Steel_Home_TrophySign::
 	msgbox Steel_Home_Text_Trophies, MSGBOX_SIGN

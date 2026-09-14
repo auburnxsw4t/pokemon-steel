@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Check Steel map contracts and execute the actual actor-visibility C special."""
 from pathlib import Path
-import json, re, struct, subprocess, tempfile
+from collections import deque
+import csv, io, json, re, struct, subprocess, tempfile, zipfile
 ROOT = Path(__file__).resolve().parents[1]
 
 def check_actors():
@@ -35,7 +36,7 @@ def check_maps():
     by_id = {m['id']:m for m in maps.values()}
     layouts = {l['id']:l for l in json.loads((ROOT/'data/layouts/layouts.json').read_text())['layouts']}
     expected_maps = {'Steel_AluminaVillage', 'Steel_HomesteadRidge', 'Steel_CatchingWoods',
-                     'Steel_SouthWoods', 'Steel_Route1Stub', 'Steel_FamilyHome_2F'}
+                     'Steel_SouthWoods', 'Steel_SouthTrail', 'Steel_Route1', 'Steel_FamilyHome_2F'}
     assert expected_maps <= maps.keys(), expected_maps - maps.keys()
     for name,m in maps.items():
         layout=layouts[m['layout']]
@@ -53,10 +54,17 @@ def check_maps():
             assert int(w['dest_warp_id']) < len(by_id[w['dest_map']]['warp_events']), (name,w)
     def directions(name):
         return [c['direction'] for c in maps[name]['connections'] or []]
-    assert {'left', 'down', 'right'} <= set(directions('Steel_AluminaVillage'))
-    assert {'right', 'down'} <= set(directions('Steel_HomesteadRidge'))
-    assert {'up'} <= set(directions('Steel_SouthWoods'))
-    assert directions('Steel_Route1Stub') == ['left']
+    assert directions('Steel_AluminaVillage') == ['left']
+    assert directions('Steel_HomesteadRidge') == ['right']
+    assert maps['Steel_CatchingWoods']['connections'] is None
+    assert maps['Steel_SouthWoods']['connections'] is None
+    assert maps['Steel_SouthTrail']['connections'] is None
+    assert maps['Steel_Route1']['connections'] is None
+    assert not any(c['map'] == 'MAP_STEEL_ROUTE1' for c in maps['Steel_AluminaVillage']['connections'])
+    village_triggers = {e['script'] for e in maps['Steel_AluminaVillage']['coord_events']}
+    ridge_triggers = {e['script'] for e in maps['Steel_HomesteadRidge']['coord_events']}
+    assert 'Steel_Village_ToSouthWoods' in village_triggers
+    assert 'Steel_Ridge_ToSouthWoods' in ridge_triggers
     woods = maps['Steel_CatchingWoods']
     target = next(o for o in woods['object_events'] if o.get('local_id') == 'LOCALID_STEEL_WOODS_TARGET')
     layout = layouts[woods['layout']]
@@ -67,12 +75,60 @@ def check_maps():
     south_raw = (ROOT / south_layout['blockdata_filepath']).read_bytes()
     south_blocks = struct.unpack('<' + 'H' * (len(south_raw) // 2), south_raw)
     assert 0x00D in {b & 0x3ff for b in south_blocks}, 'South Woods has no tall grass'
+    assert (south_layout['width'], south_layout['height']) == (36, 60)
+    route_layout = layouts[maps['Steel_Route1']['layout']]
+    assert (route_layout['width'], route_layout['height']) == (36, 72)
+    route_raw = (ROOT / route_layout['blockdata_filepath']).read_bytes()
+    route_blocks = struct.unpack('<' + 'H' * (len(route_raw) // 2), route_raw)
+    assert 0x00D in {b & 0x3ff for b in route_blocks}, 'Route 1 has no tall grass'
+    assert len([o for o in maps['Steel_SouthWoods']['object_events'] if o['trainer_type'] == 'TRAINER_TYPE_NORMAL']) == 3
+    assert len([o for o in maps['Steel_Route1']['object_events'] if o['trainer_type'] == 'TRAINER_TYPE_NORMAL']) == 5
     assert maps['Steel_FamilyHome_2F']['layout'] == 'LAYOUT_STEEL_FAMILY_HOME_2F'
     registration_kyle = next(o for o in maps['Steel_AluminaVillage']['object_events']
                              if o.get('local_id') == 'LOCALID_STEEL_VILLAGE_KYLE_REGISTRATION')
     assert (registration_kyle['x'], registration_kyle['y']) == (33, 27)
     assert registration_kyle['flag'] == 'FLAG_HIDE_STEEL_KYLE_REGISTRATION'
-    print('PASS: map sizes, topology, tall-grass target, NPC collision tiles, Kyle hide flags, and destination warps')
+    print('PASS: map sizes, revised topology, tall grass, required trainers, NPC collision tiles, Kyle flags, and warps')
+
+def check_chapter1_construction():
+    archive = ROOT/'docs/pokemon_steel/reference/chapter1/Pokemon_Steel_Chapter1_Map_Construction_V2.zip'
+    def grid(name):
+        with zipfile.ZipFile(archive) as z:
+            rows = list(csv.reader(io.TextIOWrapper(z.open(name), encoding='utf-8-sig')))
+        return [row[1:] for row in rows[1:]]
+    def shortest(source, target):
+        passable = {'P', 'G', 'C', 'E', 'B', 'L'}
+        q = deque([(source, 0, int(grid_data[source[1]][source[0]] == 'G'))])
+        best = {source: (0, q[0][2])}
+        while q:
+            (x, y), distance, grass = q.popleft()
+            if (x, y) == target:
+                return distance, grass
+            for nx, ny in ((x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)):
+                if not (0 <= ny < len(grid_data) and 0 <= nx < len(grid_data[0])):
+                    continue
+                if grid_data[ny][nx] not in passable:
+                    continue
+                candidate = (distance + 1, grass + int(grid_data[ny][nx] == 'G'))
+                if (nx, ny) not in best or candidate < best[(nx, ny)]:
+                    best[(nx, ny)] = candidate
+                    q.append(((nx, ny), *candidate))
+        raise AssertionError((source, target, 'disconnected'))
+    grid_data = grid('southwoods_grid_v2.csv')
+    assert (len(grid_data[0]), len(grid_data)) == (36, 60)
+    for source in ((6, 2), (29, 2)):
+        distance, grass = shortest(source, (18, 58))
+        assert distance >= 100 and grass >= 20, (source, distance, grass)
+    grid_data = grid('route1_grid_v2.csv')
+    assert (len(grid_data[0]), len(grid_data)) == (36, 72)
+    distance, grass = shortest((18, 1), (18, 70))
+    assert distance >= 120 and grass >= 20, (distance, grass)
+    encounters = json.loads((ROOT/'src/data/wild_encounters.json').read_text())
+    maps = {e.get('map'): e for group in encounters['wild_encounter_groups'] for e in group['encounters']}
+    for map_id in ('MAP_STEEL_SOUTH_WOODS', 'MAP_STEEL_ROUTE1'):
+        assert len(maps[map_id]['land_mons']['mons']) == 12
+        assert maps[map_id]['land_mons']['encounter_rate'] > 0
+    print('PASS: V2 semantic traversal pressure and Southwoods/Route 1 land encounter tables')
 
 def check_starter_flow():
     maps = {p.parent.name: json.loads(p.read_text()) for p in (ROOT/'data/maps').glob('Steel_*/map.json')}
@@ -142,4 +198,5 @@ def check_starter_flow():
 if __name__ == '__main__':
     check_actors()
     check_maps()
+    check_chapter1_construction()
     check_starter_flow()

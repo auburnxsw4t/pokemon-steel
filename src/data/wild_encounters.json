@@ -36577,6 +36577,48 @@
               }
             ]
           }
+        },
+        {
+          "map": "MAP_STEEL_SOUTH_WOODS",
+          "base_label": "gSteelSouthWoods",
+          "land_mons": {
+            "encounter_rate": 20,
+            "mons": [
+              {"min_level": 3, "max_level": 5, "species": "SPECIES_WURMPLE"},
+              {"min_level": 3, "max_level": 5, "species": "SPECIES_ZIGZAGOON"},
+              {"min_level": 3, "max_level": 5, "species": "SPECIES_WURMPLE"},
+              {"min_level": 4, "max_level": 6, "species": "SPECIES_TAILLOW"},
+              {"min_level": 4, "max_level": 6, "species": "SPECIES_TAILLOW"},
+              {"min_level": 4, "max_level": 6, "species": "SPECIES_LOTAD"},
+              {"min_level": 3, "max_level": 5, "species": "SPECIES_ZIGZAGOON"},
+              {"min_level": 4, "max_level": 6, "species": "SPECIES_LOTAD"},
+              {"min_level": 5, "max_level": 6, "species": "SPECIES_SHROOMISH"},
+              {"min_level": 5, "max_level": 6, "species": "SPECIES_SHROOMISH"},
+              {"min_level": 5, "max_level": 6, "species": "SPECIES_SHROOMISH"},
+              {"min_level": 5, "max_level": 6, "species": "SPECIES_SHROOMISH"}
+            ]
+          }
+        },
+        {
+          "map": "MAP_STEEL_ROUTE1",
+          "base_label": "gSteelRoute1",
+          "land_mons": {
+            "encounter_rate": 20,
+            "mons": [
+              {"min_level": 5, "max_level": 7, "species": "SPECIES_TAILLOW"},
+              {"min_level": 5, "max_level": 7, "species": "SPECIES_ZIGZAGOON"},
+              {"min_level": 5, "max_level": 7, "species": "SPECIES_TAILLOW"},
+              {"min_level": 6, "max_level": 8, "species": "SPECIES_KOFFING"},
+              {"min_level": 6, "max_level": 8, "species": "SPECIES_KOFFING"},
+              {"min_level": 5, "max_level": 7, "species": "SPECIES_WURMPLE"},
+              {"min_level": 5, "max_level": 7, "species": "SPECIES_ZIGZAGOON"},
+              {"min_level": 5, "max_level": 7, "species": "SPECIES_WURMPLE"},
+              {"min_level": 7, "max_level": 8, "species": "SPECIES_POOCHYENA"},
+              {"min_level": 7, "max_level": 8, "species": "SPECIES_POOCHYENA"},
+              {"min_level": 7, "max_level": 8, "species": "SPECIES_POOCHYENA"},
+              {"min_level": 7, "max_level": 8, "species": "SPECIES_POOCHYENA"}
+            ]
+          }
         }
       ]
     },

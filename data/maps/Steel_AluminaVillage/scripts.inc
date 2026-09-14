@@ -133,6 +133,11 @@ Steel_Village_KyleAtRegistration::
 	msgbox Steel_Village_Text_KyleRegistration, MSGBOX_NPC
 	end
 
+Steel_Village_ToSouthWoods::
+	warp MAP_STEEL_SOUTH_WOODS, 29, 3
+	waitstate
+	end
+
 Steel_Village_SchoolSign::
 	msgbox Steel_Village_Text_School, MSGBOX_SIGN
 	end

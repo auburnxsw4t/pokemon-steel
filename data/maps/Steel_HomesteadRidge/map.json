@@ -18,11 +18,6 @@
       "map": "MAP_STEEL_ALUMINA_VILLAGE",
       "offset": 0,
       "direction": "right"
-    },
-    {
-      "map": "MAP_STEEL_SOUTH_WOODS",
-      "offset": 0,
-      "direction": "down"
     }
   ],
   "object_events": [
@@ -64,7 +59,17 @@
       "dest_warp_id": "0"
     }
   ],
-  "coord_events": [],
+  "coord_events": [
+    {
+      "type": "trigger",
+      "x": 7,
+      "y": 26,
+      "elevation": 3,
+      "var": "VAR_TEMP_0",
+      "var_value": "0",
+      "script": "Steel_Ridge_ToSouthWoods"
+    }
+  ],
   "bg_events": [
     {
       "type": "sign",

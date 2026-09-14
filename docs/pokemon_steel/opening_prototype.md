@@ -177,8 +177,30 @@ No custom starter species have been added. The current mappings remain
 Posskit/Zigzagoon, Sheldo/Sandshrew, and Mimbri/Taillow. Service buildings in
 Alumina are exterior placeholders, and population/detail work remains. The
 Chapter 1 Southwoods and Route 1 V2 construction archive is preserved under
-`docs/pokemon_steel/reference/chapter1/` for its own future map ticket; those
-stubs were not rebuilt as part of the opening gameplay milestone.
+`docs/pokemon_steel/reference/chapter1/` and is now the source for the first
+functional Southwoods, South Trail, and Route 1 pass.
+
+## Chapter 1 V2 traversal pass (2026-09-13)
+
+Revision 2 replaces the former direct Alumina-east-to-Route-1 stub with the
+approved progression: Homestead Ridge or Alumina Village -> Southwoods ->
+South Trail -> Route 1. The creek clearing remains a scripted opening-only
+pocket and has no free-roam connection after Logan's tutorial.
+
+Southwoods uses the approved 36x60 semantic grid, including its two northern
+trailheads, central clearing, old logging area, repeated forced grass, creek
+and bridge corridor, side pockets, three required trainers, visible items,
+and hidden-item opportunities. Route 1 uses the approved 36x72 grid, five
+required trainers, its long grass-heavy traversal, optional branches,
+river/bridge corridor, blocked old mine, item opportunities, and a signed
+southern playtest boundary toward Oakridge. A 36x12 South Trail connects the
+two maps without requiring an HM.
+
+Existing Emerald tiles and species remain deliberate placeholders. Tan earth
+stands in for red clay, passable ground stands in for final bridge and one-way
+ledge art, and the mine is represented by blocked shrub/rock vocabulary.
+Wild tables currently use familiar species in the intended encounter roles.
+Oakridge itself is outside this map ticket and is not yet connected.
 
 ### Verification
 
@@ -194,6 +216,10 @@ stubs were not rebuilt as part of the opening gameplay milestone.
   runs three fresh openings, verifies all player/counter pairs, forces both
   rival outcomes, and checks the retained starter, healing, Silk Scarf, ball
   visibility, free movement, home re-entry, and Kyle at League Registration.
+- `python3 dev_scripts/test_steel_chapter1_emulator.py /path/to/steel-mgba-runner`
+  completes the opening, tests both Southwoods trailheads, walks the complete
+  Southwoods/South Trail/Route 1 chain, and confirms Route 1 grass starts a
+  live random encounter.
 - `dev_scripts/steel_mgba_runner.c` builds against mGBA's core library with
   that library's compile definitions. The runner used here is mGBA 0.10.5.
 

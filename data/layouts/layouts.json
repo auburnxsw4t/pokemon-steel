@@ -9360,8 +9360,8 @@
     {
       "id": "LAYOUT_STEEL_SOUTH_WOODS",
       "name": "Steel_SouthWoods_Layout",
-      "width": 32,
-      "height": 24,
+      "width": 36,
+      "height": 60,
       "primary_tileset": "gTileset_General",
       "secondary_tileset": "gTileset_Petalburg",
       "border_filepath": "data/layouts/Steel_SouthWoods/border.bin",
@@ -9369,14 +9369,25 @@
       "layout_version": "emerald"
     },
     {
-      "id": "LAYOUT_STEEL_ROUTE1_STUB",
-      "name": "Steel_Route1Stub_Layout",
-      "width": 24,
-      "height": 20,
+      "id": "LAYOUT_STEEL_SOUTH_TRAIL",
+      "name": "Steel_SouthTrail_Layout",
+      "width": 36,
+      "height": 12,
       "primary_tileset": "gTileset_General",
       "secondary_tileset": "gTileset_Petalburg",
-      "border_filepath": "data/layouts/Steel_Route1Stub/border.bin",
-      "blockdata_filepath": "data/layouts/Steel_Route1Stub/map.bin",
+      "border_filepath": "data/layouts/Steel_SouthTrail/border.bin",
+      "blockdata_filepath": "data/layouts/Steel_SouthTrail/map.bin",
+      "layout_version": "emerald"
+    },
+    {
+      "id": "LAYOUT_STEEL_ROUTE1",
+      "name": "Steel_Route1_Layout",
+      "width": 36,
+      "height": 72,
+      "primary_tileset": "gTileset_General",
+      "secondary_tileset": "gTileset_Petalburg",
+      "border_filepath": "data/layouts/Steel_Route1/border.bin",
+      "blockdata_filepath": "data/layouts/Steel_Route1/map.bin",
       "layout_version": "emerald"
     },
     {

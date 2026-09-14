@@ -3,7 +3,7 @@
 No original map or tileset is changed. Re-run after editing these coordinates.
 """
 from pathlib import Path
-import json, struct
+import csv, io, json, struct, zipfile
 ROOT=Path(__file__).resolve().parents[1]
 PATH=ROOT/'data/layouts/layouts.json'
 DATA=json.loads(PATH.read_text())
@@ -20,6 +20,8 @@ def write_layout(name,ident,w,h,tiles,source='PetalburgCity'):
         blockdata_filepath='data/layouts/'+name+'/map.bin',border_filepath='data/layouts/'+name+'/border.bin')
     DATA['layouts'][:]=[l for l in DATA['layouts'] if l['id']!=old['id']]
     DATA['layouts'].append(old)
+def remove_layout(ident):
+    DATA['layouts'][:]=[l for l in DATA['layouts'] if l['id']!='LAYOUT_'+ident]
 class Map:
     def __init__(self,w,h):
         self.w,self.h=w,h;self.tiles=[0x3001]*(w*h)
@@ -48,6 +50,42 @@ class Map:
                 by=0 if yy==0 else 2 if yy==h-1 else 1
                 bx=0 if xx==0 else 2 if xx==w-1 else 1
                 self.fill(x+xx,y+yy,1,1,mids[by][bx],True,1)
+def semantic_grid(filename):
+    archive=ROOT/'docs/pokemon_steel/reference/chapter1/Pokemon_Steel_Chapter1_Map_Construction_V2.zip'
+    with zipfile.ZipFile(archive) as z:
+        rows=list(csv.reader(io.TextIOWrapper(z.open(filename),encoding='utf-8-sig')))
+    grid=[row[1:] for row in rows[1:]]
+    assert grid and all(len(row)==len(grid[0]) for row in grid), filename
+    return grid
+def semantic_map(grid):
+    h,w=len(grid),len(grid[0])
+    result=Map(w,h)
+    result.trees(0,0,w,h)
+    for y,row in enumerate(grid):
+        for x,code in enumerate(row):
+            if code in ('P','E','B'):
+                result.path(x,y,1,1)
+            elif code=='G':
+                result.tall_grass(x,y,1,1)
+            elif code=='C':
+                result.fill(x,y,1,1,0x001)
+            elif code=='W':
+                result.fill(x,y,1,1,0x0A1,True,1)
+            elif code=='R':
+                # Existing tan earth is the temporary red-clay vocabulary.
+                result.fill(x,y,1,1,0x121,True)
+            elif code=='L':
+                # Keep the authored shortcut lanes traversable until their final
+                # one-way ledge metatiles are selected in Porymap.
+                result.path(x,y,1,1)
+            elif code=='M':
+                # The old mine is a landmark, not a Chapter 1 entrance.
+                result.fill(x,y,1,1,0x016,True)
+            elif code=='X':
+                result.tiles[y*w+x] |= 0x400
+            else:
+                raise ValueError((x,y,code))
+    return result
 v=Map(40,32);v.border()
 v.water(3,3,9,8)
 v.path(0,15,40,3);v.path(31,8,3,17)
@@ -71,6 +109,10 @@ for x,y in [(6,8),(23,8),(6,19),(23,19)]:r.house(x,y)
 for yy in [9,11]:
  r.fill(29,yy,4,1,0x121)
  for xx in [29,31]:r.fill(xx,yy,1,1,0x16,True)
+# The south-west path is the Homestead trailhead into Southwoods V2. Keep the
+# eastern garden path internal so it cannot conflict with that connection.
+r.path(5,12,5,16)
+r.trees(24,24,3,4)
 write_layout('Steel_HomesteadRidge','STEEL_HOMESTEAD_RIDGE',r.w,r.h,r.tiles)
 w=Map(28,24);w.border();w.water(2,2,24,5)
 w.trees(2,7,8,15);w.trees(20,7,6,6);w.trees(20,19,6,3)
@@ -79,17 +121,19 @@ w.tall_grass(15,10,5,5)
 for x,y in [(10,8),(12,8),(18,8),(11,19),(17,19),(21,13)]:w.fill(x,y,1,1,0x16,True)
 for x,y in [(11,10),(18,17),(12,18)]:w.fill(x,y,1,1,4)
 write_layout('Steel_CatchingWoods','STEEL_CATCHING_WOODS',w.w,w.h,w.tiles)
-# South Woods is the shared, gated woodland stub. It deliberately has no wild
-# table yet; the tall grass is layout proof for the eventual encounter table.
-s=Map(32,24);s.border();s.trees(2,5,7,7);s.trees(23,5,7,7)
-s.path(14,2,4,9);s.path(24,2,3,10);s.path(14,14,4,10);s.path(8,11,19,3)
-s.tall_grass(5,15,7,5);s.tall_grass(20,15,7,5)
-s.water(9,5,5,5)
+# Southwoods and Route 1 use the approved V2 semantic grids directly. The
+# mapping is intentionally conservative: traversal/collision comes first and
+# custom red-clay, bridge, mine, and ledge art can replace the placeholders.
+s=semantic_map(semantic_grid('southwoods_grid_v2.csv'))
 write_layout('Steel_SouthWoods','STEEL_SOUTH_WOODS',s.w,s.h,s.tiles)
-# Route 1 remains a short topology stub with a blocked continuation.
-t=Map(24,20);t.border();t.path(0,15,24,3);t.tall_grass(5,5,5,3);t.tall_grass(15,10,5,3)
-for x,y in [(3,4),(20,4),(3,15),(20,15)]:t.fill(x,y,1,1,0x16,True)
-write_layout('Steel_Route1Stub','STEEL_ROUTE1_STUB',t.w,t.h,t.tiles)
+# A quiet connector separates the dense woods from the long open route.
+trail=Map(36,12);trail.trees(0,0,trail.w,trail.h)
+trail.path(16,0,5,trail.h)
+trail.tall_grass(14,4,2,4);trail.tall_grass(21,4,2,4)
+write_layout('Steel_SouthTrail','STEEL_SOUTH_TRAIL',trail.w,trail.h,trail.tiles)
+t=semantic_map(semantic_grid('route1_grid_v2.csv'))
+remove_layout('STEEL_ROUTE1_STUB')
+write_layout('Steel_Route1','STEEL_ROUTE1',t.w,t.h,t.tiles)
 # Independent interior layouts, preserving Emerald's useful furnishings.
 for name,ident,source in [('Steel_AluminaSchool','STEEL_ALUMINA_SCHOOL','RustboroCity_PokemonSchool'),('Steel_FamilyHome','STEEL_FAMILY_HOME','LittlerootTown_BrendansHouse_1F')]:
  l=LAYOUTS[source+'_Layout'];sw,src=blocks(source)

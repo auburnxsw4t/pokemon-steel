@@ -857,17 +857,23 @@
 #define TRAINER_EVERETT                     850
 #define TRAINER_RED                         851
 #define TRAINER_LEAF                        852
-#define TRAINER_BRENDAN_PLACEHOLDER         853
-#define TRAINER_MAY_PLACEHOLDER             854
+#define TRAINER_STEEL_SOUTHWOODS_FINN       853
+#define TRAINER_STEEL_SOUTHWOODS_WADE       854
 #define TRAINER_KYLE_POSSKIT                 855
 #define TRAINER_KYLE_SHELDO                  856
 #define TRAINER_KYLE_MIMBRI                  857
+#define TRAINER_STEEL_SOUTHWOODS_JUNE       858
+#define TRAINER_STEEL_ROUTE1_ELI             859
+#define TRAINER_STEEL_ROUTE1_REED            860
+#define TRAINER_STEEL_ROUTE1_CLAY            861
+#define TRAINER_STEEL_ROUTE1_TESS            862
+#define TRAINER_STEEL_ROUTE1_COLE            863
 
-// NOTE: Because each Trainer uses a flag to determine when they are defeated, there is only space for 9 additional trainers before trainer flag space overflows
+// NOTE: Trainer IDs now fill the reserved Emerald trainer-flag range.
 //       More space can be made by shifting flags around in constants/flags.h or changing how trainer flags are handled
 //       MAX_TRAINERS_COUNT can be increased but will take up additional saveblock space
 
-#define TRAINERS_COUNT_EMERALD     858
+#define TRAINERS_COUNT_EMERALD     864
 #define MAX_TRAINERS_COUNT_EMERALD 864
 
 #if IS_FRLG
